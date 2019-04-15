@@ -16,13 +16,13 @@ class MutaccError(Exception):
 #   #   Take in sample_id, sex, mother, father, and bam_file and create a YAML file.
 #   use subprocess module for command line "mutacc --config-file <config_file> extract --padding 600 --case <case_file>"
 #
-def create_YAML_file:
+def create_YAML_file(id, sex, mother, father, bam):
 
 
 # TODO:
 #   Add the YAML file to mutacc database.
 #   use subprocess module for command line "mutacc db import /.../root_dir/imports/<case_id>.mutacc"
-def import_to_database(id, sex, mother, father, bam):
+def import_to_database():
 
 
 # TODO:
