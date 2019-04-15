@@ -1,5 +1,5 @@
 """
-File that handles bamsurgeon interaction.
+File to handle bamsurgeon interaction.
 """
 
 import os

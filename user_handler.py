@@ -1,5 +1,5 @@
 """
-File that handles user interactions.
+File to handle user interactions.
 """
 
 import os
@@ -16,6 +16,6 @@ import argparse
 
 
 #TODO:
+#   Figure out what arguments to use.
 #   Add a parser that reads all arguments and stores them.
 #   Allow the stored arguments to be used by the correct function.
-#

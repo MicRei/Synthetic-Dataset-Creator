@@ -1,5 +1,5 @@
 """
-File that handles mutacc interaction.
+File to handle mutacc interaction.
 """
 
 import os
