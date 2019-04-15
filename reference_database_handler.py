@@ -1,4 +1,4 @@
 """
 File to handle unmanipulated reference data.
-Should we add real data variants to this or leave it to mutacc?
+Should we add real data variants to file or leave it to mutacc handler?
 """
