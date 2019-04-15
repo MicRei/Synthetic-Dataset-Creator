@@ -6,7 +6,7 @@ import pysam as ps
 import yaml
 import mutacc as mac
 import time
-import yaml_handler
+import mutacc_handler
 import argparse
 
 #TODO:
