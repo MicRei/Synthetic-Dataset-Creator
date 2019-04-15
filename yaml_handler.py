@@ -23,5 +23,4 @@ class YamlHandler:
     def __init__(self):
         print("Hello from a classy YAML")
 
-    print("DOH")
     # TODO:  call yaml_parse from mutacc
