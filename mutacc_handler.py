@@ -1,3 +1,7 @@
+"""
+File that handles mutacc interaction.
+"""
+
 import os
 import numpy as np
 import re
@@ -22,16 +26,16 @@ def create_YAML_file(id, sex, mother, father, bam):
 # TODO:
 #   Add the YAML file to mutacc database.
 #   use subprocess module for command line "mutacc db import /.../root_dir/imports/<case_id>.mutacc"
-def import_to_database():
+def import_to_database(id, sex, mother, father, bam):
+    # TODO:
+    #   Call create_YAML_file with args and then import to database.
 
 
 # TODO:
 #   Return wanted sample from database
 #   use subprocess module for command line "mutacc --config-file <config.yaml> db export -m affected -c '{}'"
 def export_from_database(case):
-
-
-# TODO: export case and if that is successful, call create_dataset_from_case
+    # TODO: export case and if that is successful, call create_dataset_from_case
 
 
 # TODO:
