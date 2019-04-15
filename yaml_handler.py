@@ -7,16 +7,8 @@ import yaml
 import mutacc as mac
 import subprocess as sp
 
-
-
-# TODO: Add location of BAMsurgeons function files? Might allow another class to handle it
-#   addsnvlocation = 'locate addsnv.py'
-#   os.system(addsnvlocation)
-#   addindellocation = 'locate addindel.py'
-#   os.system(addindellocation)
-#   addsvlocation = 'locate addsv.py'
-#   os.system(addsvlocation)
-
+#TODO:
+#   Take in sample_id, sex, mother, father, and bam_file and add them to mutacc database
 
 class YamlHandler:
 

@@ -9,7 +9,7 @@ import time
 import yaml_handler
 import argparse
 
-
-def run():
-    command_parser = argparse.ArgumentParser
-    
+#TODO:
+#   Add a parser that reads all arguments and stores them.
+#   Allow the stored arguments to be used by the correct function.
+#
