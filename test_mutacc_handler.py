@@ -11,7 +11,7 @@ class TestMutaccHandler(unittest.TestCase):
     def test_something(self):
         self.assertTrue(True)
 
-    def test_YAML_loading(self):
+    def test_YAML_loading_with_proper_data(self):
         caseID = 57744
         sample_id = 'sample32'
         sex = 'male'
@@ -25,7 +25,7 @@ class TestMutaccHandler(unittest.TestCase):
         mutacc_handler._create_YAML_file(caseID, sample_id, sex, mother, father, bam, analysis, phenotype, variants)
         with open('test.yaml', 'r') as yaml_handle:
             self.assertEqual(yaml_handle.readline(), "case:\n", msg='Hello there ;)')
-            self.assert
+
 
 if __name__ == '__main__':
     unittest.main()
