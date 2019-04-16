@@ -42,8 +42,9 @@ class TestMutaccHandler(unittest.TestCase):
         analysis = 'TP53'
         phenotype = 'affected'
         variants = './my.vcf'
+        configfile = './mutacc_config.yaml'
 
-        mutacc_handler.import_to_database(case_id, sample_id, sex, mother, father, bam, analysis, phenotype, variants)
+        mutacc_handler.import_to_database(case_id, conf_file,sample_id, sex, mother, father, bam, analysis, phenotype, variants)
         with open('test.yaml', 'r') as yaml_handle:
             self.assertEqual(yaml_handle.readline(), "case:\n", msg='Hello there ;)')
         print()

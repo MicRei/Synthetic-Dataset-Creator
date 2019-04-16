@@ -20,7 +20,7 @@ class MutaccError(Exception):
 # TODO:
 #   Add the YAML file to mutacc database.
 
-def import_to_database(case_id, *args):
+def import_to_database(case_id, configfile, *args):
     """
     Function to create a new data set, or use existing data, and insert it into the mutacc database
 
@@ -31,27 +31,34 @@ def import_to_database(case_id, *args):
     """
 
     try:
-        if type(case_id) is str:
-            yaml_path = Path(case_id)
-            if yaml_path.is_file():
-                with open(case_id, 'r') as yaml_case:
+        if type(case_id) is str and Path(case_id).is_file():
+            with open(case_id, 'r') as yaml_case:
+                if not yaml_case.readable():
+                    raise MutaccError("No read permission granted.")
+                else:
                     # TODO: Add --config-file <config_file> and
                     #  --padding NUMBER to extract subprocess. Make arguments in extract dynamic.
-                    sp.run(['mutacc', '--root-dir', 'mutacc_tests', 'extract', '--case', yaml_case.name])
+                    sp.run(['mutacc', '--config', configfile, 'extract', '--case', yaml_case.name])
+
                     # TODO: Add a config file or rootdir to mutacc import subprocess
                     sp.run(['mutacc', 'db', 'import', 'root_dir/imports/' + yaml_case.name + '.mutacc'])
-                    if not yaml_case.readable():
-                        raise MutaccError("No read permission granted.")
-            else:
-                raise MutaccError("No such file exists.")
+
         elif len(args) == 8:
             new_data = [case_id]
 
             for data in args:
                 new_data.append(data)
-            _create_yaml_file(*new_data)
+            file_name = _create_yaml_file(*new_data)
+
+            # TODO: Add --config-file <config_file> and
+            #  --padding NUMBER to extract subprocess. Make arguments in extract dynamic.
+            sp.run(['mutacc', '--config', configfile, 'extract', '--case', file_name])
+
+            # TODO: Add a config file or rootdir to mutacc import subprocess
+            sp.run(['mutacc', 'db', 'import', 'root_dir/imports/' + file_name + '.mutacc'])
+
         else:
-            raise MutaccError("Not enough args sent to import. Please supplement your data")
+            raise MutaccError("Not enough args sent to import or no such file exists. Please supplement your data")
 
     except Exception as e:
         print("Something went wrong during import: ", e)
@@ -105,3 +112,5 @@ def _create_yaml_file(case_id, sample_id, sex, mother, father, bam, analysis, ph
         except yaml.YAMLError as exc:
             print('Error writing yaml object: ', exc)
             raise MutaccError("Yaml creation error")
+
+    return create_file
