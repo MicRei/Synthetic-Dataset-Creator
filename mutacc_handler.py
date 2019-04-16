@@ -10,29 +10,42 @@ import pysam as ps
 import yaml
 import mutacc as mac
 import subprocess as sp
+from pathlib import Path
 
 
 class MutaccError(Exception):
     pass
 
 
+#
 # TODO:
 #   Call create_YAML_file with args or check if provided arg is a YAML file.
 #   Add the YAML file to mutacc database.
 #   use subprocess module for command line "mutacc --config-file <config_file> extract --padding 600 --case <case_file>"
 #   use subprocess module for command line "mutacc db import /.../root_dir/imports/<case_id>.mutacc"
-def import_to_database(caseID, sample_id, sex, mother, father, bam, analysis, phenotype, variants):
-    args = (caseID, sample_id, sex, mother, father, bam, analysis, phenotype, variants)
+def import_to_database(case_id, *args):
+    try:
+        if type(case_id) is str:
+            yaml_path = Path(case_id)
+            if yaml_path.is_file():
+                with open(case_id, 'r') as yaml_case:
+                    sp.run(['mutacc', '--root-dir', '/home/mire/PycharmProjects/project_test/mutacc_tests', 'extract', '--case', yaml_case])
+                    if not yaml_case.readable():
+                        raise MutaccError("No read permission granted.")
+            else:
+                raise MutaccError("No such file exists.")
+        elif len(args) == 8:
+            new_data = [case_id]
 
-    #    try:
-    #        if args is str:
-    #           with open(str, 'r') as yaml_case:
-    #              dododo
-    #    else:
-    _create_yaml_file(*args)
+            for data in args:
+                new_data.append(data)
+            _create_yaml_file(*new_data)
+        else:
+            raise MutaccError("Not enough args sent to import. Please supplement your data")
 
+    except Exception as e:
+        print("Something went wrong during import: ", e)
 
-#    except
 
 
 # TODO:
@@ -63,19 +76,23 @@ def import_to_database(caseID, sample_id, sex, mother, father, bam, analysis, ph
 # def config_file_handler(file):
 
 
-def _create_yaml_file(caseID, sample_id, sex, mother, father, bam, analysis, phenotype, variants):
+def _create_yaml_file(case_id, sample_id, sex, mother, father, bam, analysis, phenotype, variants):
     """
         Internal function to create a YAML document from provided data.
     """
+    if case_id is str:
+        create_file = case_id + ".yaml"
+    else:
+        create_file = str(case_id) + ".yaml"
 
-    with open('test.yaml', 'w') as yamlfile:
+    print("Created file: " + create_file)
+
+    with open(create_file, 'w') as yamlfile:
         try:
-            yaml.dump({'case': {'case_id': caseID}, 'samples': [{'sample_id': sample_id, 'analysis_type': analysis,
-                                                                 'sex': sex, 'mother': mother, 'father': father,
-                                                                 'bam_file': bam, 'phenotype': phenotype}],
+            yaml.dump({'case': {'case_id': case_id}, 'samples': [{'sample_id': sample_id, 'analysis_type': analysis,
+                                                                  'sex': sex, 'mother': mother, 'father': father,
+                                                                  'bam_file': bam, 'phenotype': phenotype}],
                        'variants': variants}, yamlfile)
-
         except yaml.YAMLError as exc:
             print('Error writing yaml object: ', exc)
-
-            raise
+            raise MutaccError("Yaml creation error")

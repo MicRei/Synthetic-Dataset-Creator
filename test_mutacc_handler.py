@@ -1,6 +1,7 @@
 import unittest
 import sys
 import os
+from pathlib import Path
 
 from setuptools.command.test import test
 
@@ -9,10 +10,11 @@ import mutacc_handler
 
 class TestMutaccHandler(unittest.TestCase):
     def test_something(self):
+        print("****************************")
         self.assertTrue(True)
 
     def test_YAML_loading_with_proper_data(self):
-
+        print("Testing Function of yaml loader: ", end="")
         case_id = 57744
         sample_id = 'sample32'
         sex = 'male'
@@ -26,10 +28,12 @@ class TestMutaccHandler(unittest.TestCase):
         mutacc_handler._create_yaml_file(case_id, sample_id, sex, mother, father, bam, analysis, phenotype, variants)
         with open('test.yaml', 'r') as yaml_handle:
             self.assertEqual(yaml_handle.readline(), "case:\n", msg='Hello there ;)')
-
+        print()
+    
     def test_import_to_database_using_new_data(self):
 
-        case_id = 63219
+        print("Testing with new data: ", end="")
+        case_id = 23423
         sample_id = 'sample59'
         sex = 'female'
         mother = '0'
@@ -42,6 +46,18 @@ class TestMutaccHandler(unittest.TestCase):
         mutacc_handler.import_to_database(case_id, sample_id, sex, mother, father, bam, analysis, phenotype, variants)
         with open('test.yaml', 'r') as yaml_handle:
             self.assertEqual(yaml_handle.readline(), "case:\n", msg='Hello there ;)')
+        print()
+
+    def test_import_to_database_using_file(self):
+        print("Testing with file: ", end="")
+        mutacc_handler.import_to_database('test.yaml')
+        file = Path('test.yaml')
+        if file.is_file():
+            with open('test.yaml', 'r') as yaml_handle:
+                self.assertEqual(yaml_handle.readline(), "case:\n", msg='Hello there ;)')
+            print()
+        else:
+            print("No such file")
 
 
 if __name__ == '__main__':
