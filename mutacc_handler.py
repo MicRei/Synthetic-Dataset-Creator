@@ -26,7 +26,6 @@ def create_YAML_file():  # add as arguments --> id, sex, mother, father, bam
     mother = "0"
     father = "0"
     bam = "./"
-
     print yaml.dump({'case id': id, 'gender': sex, })
 
 # TODO:
