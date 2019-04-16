@@ -17,19 +17,20 @@ class MutaccError(Exception):
     pass
 
 
-#
 # TODO:
-#   Call create_YAML_file with args or check if provided arg is a YAML file.
 #   Add the YAML file to mutacc database.
-#   use subprocess module for command line "mutacc --config-file <config_file> extract --padding 600 --case <case_file>"
-#   use subprocess module for command line "mutacc db import /.../root_dir/imports/<case_id>.mutacc"
+
 def import_to_database(case_id, *args):
     try:
         if type(case_id) is str:
             yaml_path = Path(case_id)
             if yaml_path.is_file():
                 with open(case_id, 'r') as yaml_case:
-                    sp.run(['mutacc', '--root-dir', '/home/mire/PycharmProjects/project_test/mutacc_tests', 'extract', '--case', yaml_case])
+                    # TODO: Add --config-file <config_file> and
+                    #  --padding NUMBER to extract subprocess. Make arguments in extract dynamic.
+                    sp.run(['mutacc', '--root-dir', 'mutacc_tests', 'extract', '--case', yaml_case.name])
+                    # TODO: Add a config file or rootdir to mutacc import subprocess
+                    sp.run(['mutacc', 'db', 'import', 'root_dir/imports/' + yaml_case.name + '.mutacc'])
                     if not yaml_case.readable():
                         raise MutaccError("No read permission granted.")
             else:
@@ -45,7 +46,6 @@ def import_to_database(case_id, *args):
 
     except Exception as e:
         print("Something went wrong during import: ", e)
-
 
 
 # TODO:
