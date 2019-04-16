@@ -17,14 +17,22 @@ class MutaccError(Exception):
 
 
 # TODO:
+#   Call create_YAML_file with args or check if provided arg is a YAML file.
 #   Add the YAML file to mutacc database.
 #   use subprocess module for command line "mutacc --config-file <config_file> extract --padding 600 --case <case_file>"
 #   use subprocess module for command line "mutacc db import /.../root_dir/imports/<case_id>.mutacc"
-# def import_to_database(id, sex, mother, father, bam):
+def import_to_database(caseID, sample_id, sex, mother, father, bam, analysis, phenotype, variants):
+    args = (caseID, sample_id, sex, mother, father, bam, analysis, phenotype, variants)
+
+    #    try:
+    #        if args is str:
+    #           with open(str, 'r') as yaml_case:
+    #              dododo
+    #    else:
+    _create_yaml_file(*args)
 
 
-# TODO:
-#   Call create_YAML_file with args and then import to database.
+#    except
 
 
 # TODO:
@@ -44,7 +52,7 @@ class MutaccError(Exception):
 
 
 # TODO:
-#   Remove specific case form daatabase
+#   Remove specific case form database
 #   use subprocess module for command line "mutacc --config-file <config.yaml> db remove <case_id>"
 # def remove_from_database(case):
 
@@ -55,7 +63,7 @@ class MutaccError(Exception):
 # def config_file_handler(file):
 
 
-def _create_YAML_file(caseID, sample_id, sex, mother, father, bam, analysis, phenotype, variants):
+def _create_yaml_file(caseID, sample_id, sex, mother, father, bam, analysis, phenotype, variants):
     """
         Internal function to create a YAML document from provided data.
     """

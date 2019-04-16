@@ -12,7 +12,8 @@ class TestMutaccHandler(unittest.TestCase):
         self.assertTrue(True)
 
     def test_YAML_loading_with_proper_data(self):
-        caseID = 57744
+
+        case_id = 57744
         sample_id = 'sample32'
         sex = 'male'
         mother = '0'
@@ -22,7 +23,23 @@ class TestMutaccHandler(unittest.TestCase):
         phenotype = 'affected'
         variants = './my.vcf'
 
-        mutacc_handler._create_YAML_file(caseID, sample_id, sex, mother, father, bam, analysis, phenotype, variants)
+        mutacc_handler._create_yaml_file(case_id, sample_id, sex, mother, father, bam, analysis, phenotype, variants)
+        with open('test.yaml', 'r') as yaml_handle:
+            self.assertEqual(yaml_handle.readline(), "case:\n", msg='Hello there ;)')
+
+    def test_import_to_database_using_new_data(self):
+
+        case_id = 63219
+        sample_id = 'sample59'
+        sex = 'female'
+        mother = '0'
+        father = 'sample32'
+        bam = './here.bam'
+        analysis = 'TP53'
+        phenotype = 'affected'
+        variants = './my.vcf'
+
+        mutacc_handler.import_to_database(case_id, sample_id, sex, mother, father, bam, analysis, phenotype, variants)
         with open('test.yaml', 'r') as yaml_handle:
             self.assertEqual(yaml_handle.readline(), "case:\n", msg='Hello there ;)')
 
