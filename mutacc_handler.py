@@ -36,27 +36,28 @@ def import_to_database(case_id, configfile, *args):
                 if not yaml_case.readable():
                     raise MutaccError("No read permission granted.")
                 else:
+                    """
                     # TODO: Add --config-file <config_file> and
                     #  --padding NUMBER to extract subprocess. Make arguments in extract dynamic.
                     sp.run(['mutacc', '--config', configfile, 'extract', '--case', yaml_case.name])
 
                     # TODO: Add a config file or rootdir to mutacc import subprocess
                     sp.run(['mutacc', 'db', 'import', 'root_dir/imports/' + yaml_case.name + '.mutacc'])
-
+                    """
         elif len(args) == 8:
             new_data = [case_id]
 
             for data in args:
                 new_data.append(data)
             file_name = _create_yaml_file(*new_data)
-
+            """
             # TODO: Add --config-file <config_file> and
             #  --padding NUMBER to extract subprocess. Make arguments in extract dynamic.
             sp.run(['mutacc', '--config', configfile, 'extract', '--case', file_name])
 
             # TODO: Add a config file or rootdir to mutacc import subprocess
             sp.run(['mutacc', 'db', 'import', 'root_dir/imports/' + file_name + '.mutacc'])
-
+            """
         else:
             raise MutaccError("Not enough args sent to import or no such file exists. Please supplement your data")
 

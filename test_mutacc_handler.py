@@ -29,7 +29,7 @@ class TestMutaccHandler(unittest.TestCase):
         with open('test.yaml', 'r') as yaml_handle:
             self.assertEqual(yaml_handle.readline(), "case:\n", msg='Hello there ;)')
         print()
-    
+
     def test_import_to_database_using_new_data(self):
 
         print("Testing with new data: ", end="")
@@ -44,14 +44,15 @@ class TestMutaccHandler(unittest.TestCase):
         variants = './my.vcf'
         configfile = './mutacc_config.yaml'
 
-        mutacc_handler.import_to_database(case_id, conf_file,sample_id, sex, mother, father, bam, analysis, phenotype, variants)
+        mutacc_handler.import_to_database(case_id, configfile, sample_id, sex, mother, father, bam, analysis, phenotype,
+                                          variants)
         with open('test.yaml', 'r') as yaml_handle:
             self.assertEqual(yaml_handle.readline(), "case:\n", msg='Hello there ;)')
         print()
 
     def test_import_to_database_using_file(self):
         print("Testing with file: ", end="")
-        mutacc_handler.import_to_database('test.yaml')
+        mutacc_handler.import_to_database('test.yaml', 'mutacc_config.yaml')
         file = Path('test.yaml')
         if file.is_file():
             with open('test.yaml', 'r') as yaml_handle:
