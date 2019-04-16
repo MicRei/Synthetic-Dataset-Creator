@@ -18,8 +18,9 @@ class MutaccError(Exception):
 
 # TODO:
 #   Add the YAML file to mutacc database.
+#   use subprocess module for command line "mutacc --config-file <config_file> extract --padding 600 --case <case_file>"
 #   use subprocess module for command line "mutacc db import /.../root_dir/imports/<case_id>.mutacc"
-#def import_to_database(id, sex, mother, father, bam):
+# def import_to_database(id, sex, mother, father, bam):
 
 
 # TODO:
@@ -29,7 +30,7 @@ class MutaccError(Exception):
 # TODO:
 #   Return wanted sample from database
 #   use subprocess module for command line "mutacc --config-file <config.yaml> db export -m affected -c '{}'"
-#def export_from_database(case):
+# def export_from_database(case):
 
 
 # TODO: export case and if that is successful, call create_dataset_from_case
@@ -39,31 +40,31 @@ class MutaccError(Exception):
 #   Create the dataset from exported case
 #   use subprocess module for command line
 #   "mutacc --config-file <config_file> synthesize -b <bam> -f <fastq1_child> -f2 <fastq2_child> -q child_query.mutacc"
-#def create_dataset_from_case(data):
+# def create_dataset_from_case(data):
 
 
 # TODO:
 #   Remove specific case form daatabase
 #   use subprocess module for command line "mutacc --config-file <config.yaml> db remove <case_id>"
-#def remove_from_database(case):
+# def remove_from_database(case):
 
 
 # TODO:
 #  Check mutacc config file or create one.
 #   If config file exist, use it. Else, create default.
-#def config_file_handler(file):
+# def config_file_handler(file):
 
 
-# TODO:
-#   #   Take in sample_id, sex, mother, father, and bam_file and create a YAML file.
-#   use subprocess module for command line "mutacc --config-file <config_file> extract --padding 600 --case <case_file>"
 def _create_YAML_file(caseID, sample_id, sex, mother, father, bam, analysis, phenotype, variants):
+    """
+        Internal function to create a YAML document from provided data.
+    """
 
     with open('test.yaml', 'w') as yamlfile:
         try:
             yaml.dump({'case': {'case_id': caseID}, 'samples': [{'sample_id': sample_id, 'analysis_type': analysis,
-                                                                  'sex': sex, 'mother': mother, 'father': father,
-                                                                  'bam_file': bam, 'phenotype': phenotype}],
+                                                                 'sex': sex, 'mother': mother, 'father': father,
+                                                                 'bam_file': bam, 'phenotype': phenotype}],
                        'variants': variants}, yamlfile)
 
         except yaml.YAMLError as exc:
