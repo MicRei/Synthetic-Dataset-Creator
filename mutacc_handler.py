@@ -21,6 +21,15 @@ class MutaccError(Exception):
 #   Add the YAML file to mutacc database.
 
 def import_to_database(case_id, *args):
+    """
+    Function to create a new data set, or use existing data, and insert it into the mutacc database
+
+    :param case_id: path to a yamlfile with the correct structure or the ID of a new case
+    :param args: the 8 additional data needed to create a new case;
+                    sample_id, sex, mother, father, bam, analysis, phenotype, variants
+    :return: None
+    """
+
     try:
         if type(case_id) is str:
             yaml_path = Path(case_id)
