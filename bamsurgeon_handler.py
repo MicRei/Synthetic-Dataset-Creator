@@ -39,7 +39,6 @@ def create_snv(variationfile, referencefile, bamfile, outputfile, nr_procs, *arg
 # TODO:
 #   Add more arguments if desired by the user
 def create_sv(variationfile, referencefile, bamfile, outputfile, nr_procs, *args):
-    print("HEllo from indel)")
     sp.run(['addsnv.py', '-v', variationfile, '-r', referencefile, '-f', bamfile, '-o', outputfile, '-p',
             nr_procs, '--maxdepth', '10000'])
 
@@ -47,7 +46,6 @@ def create_sv(variationfile, referencefile, bamfile, outputfile, nr_procs, *args
 # TODO:
 #   Add more arguments if desired by the user
 def create_indel(variationfile, referencefile, bamfile, outputfile, nr_procs, *args):
-    print("HEllo from indel)")
     sp.run(
         ['addsnv.py', '-v', variationfile, '-r', referencefile, '-f', bamfile, '-o', outputfile, '-p',
          nr_procs, '--maxdepth', '10000'])
