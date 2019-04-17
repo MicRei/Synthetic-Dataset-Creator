@@ -7,7 +7,6 @@ import numpy as np
 import re
 import sys
 import pysam as ps
-import yaml
 import mutacc as mac
 import time
 import mutacc_handler
