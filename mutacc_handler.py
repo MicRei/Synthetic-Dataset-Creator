@@ -66,10 +66,15 @@ def _mutacc_extract_and_import(configfile, filename):
 
 
 # TODO:
-#   Return wanted sample from database and Create the dataset from exported case
-#   Add more options or make options dynamic?
-#   Make config file dynamic
+#   Return wanted sample from database and Create the dataset from exported case.
+#   Add -b, -f, -f2 and -q as options as parameters to function.
+#   Make config file dynamic.
 def export_from_database(case):
+    """
+    Export a case from the database and create a dataset, stored as FASTQ, from it.
+    :param case: Case ID of the desired case.
+    :return: None
+    """
     sp.run(['mutacc', '--config-file', './mutacc_config.yaml', 'db', 'export', '-m', 'affected', '-c', '{}'])
     sp.run(
         ['mutacc', '--config-file', './mutacc_config.yaml', 'synthesize', '-b', '<bam>', '-f', '<fastq1_child>', '-f2',
@@ -77,16 +82,15 @@ def export_from_database(case):
 
 
 # TODO:
-#   Remove specific case form database
-#   Make config file dynamic
+#   Remove specific case from database
+#   Make config file dynamic.
 def remove_from_database(case):
+    """
+    Removes the specified case from the database completely.
+    :param case: Case ID of the desired case.
+    :return: None
+    """
     sp.run(['mutacc', '--config-file', './mutacc_config.yaml', 'db', 'remove', case])
-
-
-# TODO:
-#  Check mutacc config file or create one.
-#   If config file exist, use it. Else, create default.
-# def config_file_handler(file):
 
 
 def _create_yaml_file(case_id, sample_id, sex, mother, father, bam, analysis, phenotype, variants):
