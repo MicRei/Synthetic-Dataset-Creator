@@ -29,7 +29,7 @@ import subprocess as sp
 
 
 # TODO:
-#   run subprocess module with "addsnv  -v REGIONS_TO_MUTATE -r REFERENCE_FASTA -f BAM_FILE -o OUTPUT_FILE"
+#   Add more arguments if desired by the user
 def create_snv(addsnv_location, variationfile, referencefile, bamfile, outputfile, nr_procs, *args):
     sp.run(
         [addsnv_location, '-v', variationfile, '-r', referencefile, '-f', bamfile, '-o', outputfile,
@@ -37,7 +37,7 @@ def create_snv(addsnv_location, variationfile, referencefile, bamfile, outputfil
 
 
 # TODO:
-#   run subprocess module with "addsv  -v REGIONS_TO_MUTATE -r REFERENCE_FASTA -f BAM_FILE -o OUTPUT_FILE"
+#   Add more arguments if desired by the user
 def create_sv(addsv_location, variationfile, referencefile, bamfile, outputfile, nr_procs, *args):
     print("HEllo from indel)")
     sp.run([addsv_location, '-v', variationfile, '-r', referencefile, '-f', bamfile, '-o', outputfile, '-p',
@@ -45,7 +45,7 @@ def create_sv(addsv_location, variationfile, referencefile, bamfile, outputfile,
 
 
 # TODO:
-#   run subprocess module with "addindel  -v REGIONS_TO_MUTATE -r REFERENCE_FASTA -f BAM_FILE -o OUTPUT_FILE"
+#   Add more arguments if desired by the user
 def create_indel(addindel_location, variationfile, referencefile, bamfile, outputfile, nr_procs, *args):
     print("HEllo from indel)")
     sp.run(

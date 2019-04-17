@@ -8,7 +8,7 @@ class MyTestCase(unittest.TestCase):
         variationfile = '/home/mire/PycharmProjects/project_files/mychr17snv.bed'
         referencefile = '/home/mire/PycharmProjects/project_files/fastadocs/hg19.fa'
         bamfile = '/home/mire/PycharmProjects/project_files/' \
-                  '17-1143_mybam.sorted.bam'
+                  'err2.bam'
         outputfile = '/home/mire/PycharmProjects/project_test/bms_output/addsnvtest.bam'
         nr_procs = '30'
 
