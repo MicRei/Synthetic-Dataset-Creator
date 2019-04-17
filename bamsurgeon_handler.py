@@ -12,6 +12,7 @@ import mutacc as mac
 import time
 import mutacc_handler
 import argparse
+import subprocess as sp
 
 
 # TODO:
@@ -29,14 +30,17 @@ import argparse
 
 # TODO:
 #   run subprocess module with "addsnv  -v REGIONS_TO_MUTATE -r REFERENCE_FASTA -f BAM_FILE -o OUTPUT_FILE"
-def create_snv():
+def create_snv(addsnv_location, variationfile, referencefile, bamfile, outputfile, *args):
+    sp.run(['addsnv.py', '-v', 'REGIONS_TO_MUTATE', '-r', 'REFERENCE_FASTA', '-f', 'BAM_FILE', '-o', 'OUTPUT_FILE'])
 
 
 # TODO:
 #   run subprocess module with "addsv  -v REGIONS_TO_MUTATE -r REFERENCE_FASTA -f BAM_FILE -o OUTPUT_FILE"
-def create_sv():
+def create_sv(addsv_location, variationfile, referencefile, bamfile, outputfile, *args):
+    sp.run(['addsv.py', '-v', 'REGIONS_TO_MUTATE', '-r', 'REFERENCE_FASTA', '-f', 'BAM_FILE', '-o', 'OUTPUT_FILE'])
 
 
 # TODO:
 #   run subprocess module with "addindel  -v REGIONS_TO_MUTATE -r REFERENCE_FASTA -f BAM_FILE -o OUTPUT_FILE"
-def create_indel():
+def create_indel(addindel_location, variationfile, referencefile, bamfile, outputfile, *args):
+    sp.run(['addindel.py', '-v', 'REGIONS_TO_MUTATE', '-r', 'REFERENCE_FASTA', '-f', 'BAM_FILE', '-o', 'OUTPUT_FILE'])
