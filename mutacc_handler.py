@@ -71,8 +71,9 @@ def _mutacc_extract_and_import(configfile, filename):
 #   Make config file dynamic
 def export_from_database(case):
     sp.run(['mutacc', '--config-file', './mutacc_config.yaml', 'db', 'export', '-m', 'affected', '-c', '{}'])
-    sp.run(['mutacc', '--config-file', './mutacc_config.yaml', 'synthesize', '-b', '<bam>', '-f', '<fastq1_child>', '-f2',
-            '<fastq2_child>', '-q', 'child_query.mutacc'])
+    sp.run(
+        ['mutacc', '--config-file', './mutacc_config.yaml', 'synthesize', '-b', '<bam>', '-f', '<fastq1_child>', '-f2',
+         '<fastq2_child>', '-q', 'child_query.mutacc'])
 
 
 # TODO:
