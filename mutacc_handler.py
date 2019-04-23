@@ -17,11 +17,23 @@ def import_to_database(case_id, configfile, *args):
     """
     Function to create a new data set, or use existing data, and insert it into the mutacc database
 
-    :param case_id:     path to a yamlfile with the correct structure or the ID of a new case
-    :param configfile:  config file containing the root directory of mutaccfiles
-    :param args:        the 8 additional data needed to create a new case;
-                            sample_id, sex, mother, father, bam, analysis, phenotype, variants
-    :return:            None
+    :param case_id:     Path to a yamlfile with the correct structure or the ID of a new case
+
+    :param configfile:  Config file containing the root directory of mutaccfiles.
+                        See https://github.com/Clinical-Genomics/mutacc#configuration-file for more information
+
+    :param args:        The 8 additional data needed to create a new case;
+                            Sample ID of the sample,
+                            Gender of the sample,
+                            Sample ID of Mothers sample if applicable, '0' if not,
+                            Sample ID of Father of sample if applicable, '0' if not,
+                            Location of BAM file,
+                            Type of analysis performed,
+                            Phenotype of the subject,
+                            VCF location
+                        For an example, see https://github.com/Clinical-Genomics/mutacc#populate-the-mutacc-database
+
+    :return:            None, case added to database
     """
 
     try:
@@ -60,7 +72,7 @@ def _mutacc_extract_and_import(configfile, case_id, case_yaml):
     :param configfile:      the config file containing the root directory of mutaccfiles
     :param case_id:         The name of the case file
     :param case_yaml:       The name of the case YAML file
-    :return:                None
+    :return:                None, case added to database
     """
     sp.run(['mutacc', '--config-file', configfile, 'extract', '--case', case_yaml])
     sp.run(['mutacc', 'db', 'import', '/.../root_dir/imports/' + str(case_id) + '.mutacc'])
@@ -69,14 +81,22 @@ def _mutacc_extract_and_import(configfile, case_id, case_yaml):
 # TODO:
 #   Return wanted sample from database and Create the dataset from exported case.
 #   Add -b, -f, -f2 and -q as options as parameters to function.
-#   Make config file dynamic.
-def export_from_database(configfile, member, background_bam, background_fastq1, background_fastq2, *args):
+def export_from_database(configfile, background_bam, background_fastq1, background_fastq2, member='affected',
+                         case='{}'):
     """
-    Export a case from the database and create a dataset, stored as FASTQ, from it.
-    :param case: Case ID of the desired case.
-    :return: None
+    Export a case from the database and create a dataset, stored as FASTQ, from it. More information can be found at
+        https://github.com/Clinical-Genomics/mutacc#export-datasets-from-the-database
+
+    :param configfile:          the config file containing the root directory of mutaccfiles
+                                See https://github.com/Clinical-Genomics/mutacc#configuration-file for more information.
+    :param member:              member to look for, default is 'affected',
+    :param background_bam:      BAM-file to use as base for dataset
+    :param background_fastq1:   FastQ-file to use as base for dataset
+    :param background_fastq2:   FastQ-file to use as base for pair-ended datasets
+    :param case:                Specific case to look for
+    :return:                    Outputs fastq files related to the synthetic dataset created.
     """
-    sp.run(['mutacc', '--config-file', configfile, 'db', 'export', '-m', member, '-c', '{}'])
+    sp.run(['mutacc', '--config-file', configfile, 'db', 'export', '-m', member, '-c', case])
     sp.run(
         ['mutacc', '--config-file', configfile, 'synthesize', '-b', background_bam, '-f', background_fastq1, '-f2',
          background_fastq2, '-q', 'child_query.mutacc'])

@@ -1,7 +1,6 @@
 import unittest
 from pathlib import Path
 
-
 import mutacc_handler
 
 
@@ -25,7 +24,6 @@ class TestMutaccHandler(unittest.TestCase):
         print()
 
     def test_import_to_database_using_new_data(self):
-
         print("Testing with new data: ", end="")
         case_id = 23423
         sample_id = 'sample59'

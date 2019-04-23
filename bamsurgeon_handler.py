@@ -4,6 +4,7 @@ File to handle bamsurgeon interaction.
 
 import subprocess as sp
 
+
 # TODO: Parse args in case of more arguments. REMEMBER: addsv does not handle picard.
 def create_mutations(mutationtype, variationfile, referencefile, bamfile, outputfile, nr_procs, *args):
     """
