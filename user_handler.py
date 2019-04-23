@@ -38,7 +38,7 @@ def remove_case_from_database():
 
 # TODO:
 #   Function to create mutation and add it directly to the database
-def bundle_to_database():
+def mass_import_to_database():
     create_mutations_in_bamfile()
     add_case_to_database()
 
