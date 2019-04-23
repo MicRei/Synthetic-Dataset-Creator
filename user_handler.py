@@ -57,5 +57,5 @@ def mass_import_to_database(mutationtype, list_of_variationfiles, list_of_refere
 
 # TODO:
 #   Function to retrieve a case from the database and synthesize it
-def create_dataset():
-    mach.export_from_database()
+def create_dataset(configfile, member, background_bam, background_fastq1, background_fastq2, *args):
+    mach.export_from_database(configfile, member, background_bam, background_fastq1, background_fastq2, args)

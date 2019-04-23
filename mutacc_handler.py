@@ -70,16 +70,16 @@ def _mutacc_extract_and_import(configfile, case_id, case_yaml):
 #   Return wanted sample from database and Create the dataset from exported case.
 #   Add -b, -f, -f2 and -q as options as parameters to function.
 #   Make config file dynamic.
-def export_from_database():
+def export_from_database(configfile, member, background_bam, background_fastq1, background_fastq2, *args):
     """
     Export a case from the database and create a dataset, stored as FASTQ, from it.
     :param case: Case ID of the desired case.
     :return: None
     """
-    sp.run(['mutacc', '--config-file', './mutacc_config.yaml', 'db', 'export', '-m', 'affected', '-c', '{}'])
+    sp.run(['mutacc', '--config-file', configfile, 'db', 'export', '-m', member, '-c', '{}'])
     sp.run(
-        ['mutacc', '--config-file', './mutacc_config.yaml', 'synthesize', '-b', '<bam>', '-f', '<fastq1_child>', '-f2',
-         '<fastq2_child>', '-q', 'child_query.mutacc'])
+        ['mutacc', '--config-file', configfile, 'synthesize', '-b', background_bam, '-f', background_fastq1, '-f2',
+         background_fastq2, '-q', 'child_query.mutacc'])
 
 
 # TODO:
