@@ -40,8 +40,8 @@ def import_to_database(case_id, configfile, *args):
 
             for data in args:
                 new_data.append(data)
-            caseYAML = _create_yaml_file(*new_data)
-            _mutacc_extract_and_import(configfile, case_id, caseYAML)
+            case_yaml = _create_yaml_file(*new_data)
+            _mutacc_extract_and_import(configfile, case_id, case_yaml)
 
         else:
             raise MutaccError("Not enough args sent to import or no such file exists. Please supplement your data")
@@ -53,15 +53,16 @@ def import_to_database(case_id, configfile, *args):
 # TODO: Add --config-file <config_file> and
 #  --padding NUMBER to extract subprocess. Make arguments in extract dynamic.
 # TODO: Add a config file or rootdir to mutacc import subprocess
-def _mutacc_extract_and_import(configfile, case_id, caseYAML):
+def _mutacc_extract_and_import(configfile, case_id, case_yaml):
     """
     Internal function to handle mutacc data extraction and import to database
 
     :param configfile:      the config file containing the root directory of mutaccfiles
-    :param filename:        The name of the case file
+    :param case_id:         The name of the case file
+    :param case_yaml:       The name of the case YAML file
     :return:                None
     """
-    sp.run(['mutacc', '--config-file', configfile, 'extract', '--case', caseYAML])
+    sp.run(['mutacc', '--config-file', configfile, 'extract', '--case', case_yaml])
     sp.run(['mutacc', 'db', 'import', '/.../root_dir/imports/' + str(case_id) + '.mutacc'])
 
 
@@ -69,7 +70,7 @@ def _mutacc_extract_and_import(configfile, case_id, caseYAML):
 #   Return wanted sample from database and Create the dataset from exported case.
 #   Add -b, -f, -f2 and -q as options as parameters to function.
 #   Make config file dynamic.
-def export_from_database(case):
+def export_from_database():
     """
     Export a case from the database and create a dataset, stored as FASTQ, from it.
     :param case: Case ID of the desired case.

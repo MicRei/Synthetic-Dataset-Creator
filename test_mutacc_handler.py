@@ -1,9 +1,6 @@
 import unittest
-import sys
-import os
 from pathlib import Path
 
-from setuptools.command.test import test
 
 import mutacc_handler
 
