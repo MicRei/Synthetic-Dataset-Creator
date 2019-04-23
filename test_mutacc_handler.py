@@ -49,10 +49,10 @@ class TestMutaccHandler(unittest.TestCase):
 
     def test_import_to_database_using_file(self):
         print("Testing with file: ", end="")
-        mutacc_handler.import_to_database('test.yaml', 'mutacc_config.yaml')
-        file = Path('test.yaml')
+        mutacc_handler.import_to_database('test.merged.deduped.sorted.pileup.yaml', 'mutacc_config.yaml')
+        file = Path('test.merged.deduped.sorted.pileup.yaml')
         if file.is_file():
-            with open('test.yaml', 'r') as yaml_handle:
+            with open('test.merged.deduped.sorted.pileup.yaml', 'r') as yaml_handle:
                 self.assertEqual(yaml_handle.readline(), "case:\n", msg='Hello there ;)')
             print()
         else:
