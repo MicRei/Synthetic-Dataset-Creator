@@ -30,18 +30,18 @@ def import_to_database(case_id, configfile, *args):
                 if not yaml_case.readable():
                     raise MutaccError("No read permission granted.")
                 else:
-                    print("Importing into database")
+                    print("Importing into database: " + yaml_case.name)
                     # TODO: Add --config-file <config_file> and
                     #  --padding NUMBER to extract subprocess. Make arguments in extract dynamic.
-                    _mutacc_extract_and_import(configfile, yaml_case.name)
+                    _mutacc_extract_and_import(configfile, yaml_case.name, case_id)
                     # TODO: Add a config file or rootdir to mutacc import subprocess
         elif len(args) == 8:
             new_data = [case_id]
 
             for data in args:
                 new_data.append(data)
-            file_name = _create_yaml_file(*new_data)
-            _mutacc_extract_and_import(configfile, file_name)
+            caseYAML = _create_yaml_file(*new_data)
+            _mutacc_extract_and_import(configfile, case_id, caseYAML)
 
         else:
             raise MutaccError("Not enough args sent to import or no such file exists. Please supplement your data")
@@ -53,7 +53,7 @@ def import_to_database(case_id, configfile, *args):
 # TODO: Add --config-file <config_file> and
 #  --padding NUMBER to extract subprocess. Make arguments in extract dynamic.
 # TODO: Add a config file or rootdir to mutacc import subprocess
-def _mutacc_extract_and_import(configfile, filename):
+def _mutacc_extract_and_import(configfile, case_id, caseYAML):
     """
     Internal function to handle mutacc data extraction and import to database
 
@@ -61,8 +61,8 @@ def _mutacc_extract_and_import(configfile, filename):
     :param filename:        The name of the case file
     :return:                None
     """
-    sp.run(['mutacc', '--config-file', configfile, 'extract', '--case', filename])
-    sp.run(['mutacc', 'db', 'import', '/.../root_dir/imports/' + filename + '.mutacc'])
+    sp.run(['mutacc', '--config-file', configfile, 'extract', '--case', caseYAML])
+    sp.run(['mutacc', 'db', 'import', '/.../root_dir/imports/' + str(case_id) + '.mutacc'])
 
 
 # TODO:

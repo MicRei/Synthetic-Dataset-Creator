@@ -9,13 +9,10 @@ import mutacc_handler
 
 
 class TestMutaccHandler(unittest.TestCase):
-    def test_something(self):
-        print("****************************")
-        self.assertTrue(True)
 
     def test_YAML_loading_with_proper_data(self):
         print("Testing Function of yaml loader: ", end="")
-        case_id = 57744
+        case_id = 'test'
         sample_id = 'sample32'
         sex = 'male'
         mother = '0'
@@ -37,7 +34,7 @@ class TestMutaccHandler(unittest.TestCase):
         sample_id = 'sample59'
         sex = 'female'
         mother = '0'
-        father = 'sample32'
+        father = '0'
         bam = './here.bam'
         analysis = 'TP53'
         phenotype = 'affected'
