@@ -43,10 +43,8 @@ def import_to_database(case_id, configfile, *args):
                     raise MutaccError("No read permission granted.")
                 else:
                     print("Importing into database: " + yaml_case.name)
-                    # TODO: Add --config-file <config_file> and
-                    #  --padding NUMBER to extract subprocess. Make arguments in extract dynamic.
+                    # TODO: add --padding NUMBER to extract subprocess. Make arguments dynamic.
                     _mutacc_extract_and_import(configfile, yaml_case.name, case_id)
-                    # TODO: Add a config file or rootdir to mutacc import subprocess
         elif len(args) == 8:
             new_data = [case_id]
 
@@ -62,9 +60,7 @@ def import_to_database(case_id, configfile, *args):
         print("Something went wrong during import: ", e)
 
 
-# TODO: Add --config-file <config_file> and
-#  --padding NUMBER to extract subprocess. Make arguments in extract dynamic.
-# TODO: Add a config file or rootdir to mutacc import subprocess
+# TODO: add --padding NUMBER to extract subprocess. Make arguments dynamic.
 def _mutacc_extract_and_import(configfile, case_id, case_yaml):
     """
     Internal function to handle mutacc data extraction and import to database
