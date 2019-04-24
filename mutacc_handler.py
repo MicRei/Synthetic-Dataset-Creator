@@ -13,7 +13,7 @@ class MutaccError(Exception):
 # TODO:
 #   Add the YAML file to mutacc database.
 
-def import_to_database(case_id, configfile, *args):
+def import_to_database(case_id, configfile, picard_path, *args):
     """
     Function to create a new data set, or use existing data, and insert it into the mutacc database
 
@@ -21,6 +21,8 @@ def import_to_database(case_id, configfile, *args):
 
     :param configfile:  Config file containing the root directory of mutaccfiles.
                         See https://github.com/Clinical-Genomics/mutacc#configuration-file for more information
+
+    :param picard_path: Path to the picard.jar file
 
     :param args:        The 8 additional data needed to create a new case;
                             Sample ID of the sample,
@@ -51,7 +53,7 @@ def import_to_database(case_id, configfile, *args):
             for data in args:
                 new_data.append(data)
             case_yaml = _create_yaml_file(*new_data)
-            _mutacc_extract_and_import(configfile, case_id, case_yaml)
+            _mutacc_extract_and_import(configfile, case_id, case_yaml, picard_path)
 
         else:
             raise MutaccError("Not enough args sent to import or no such file exists. Please supplement your data")
@@ -61,7 +63,7 @@ def import_to_database(case_id, configfile, *args):
 
 
 # TODO: add --padding NUMBER to extract subprocess. Make arguments dynamic.
-def _mutacc_extract_and_import(configfile, case_id, case_yaml):
+def _mutacc_extract_and_import(configfile, case_id, case_yaml, picard_path):
     """
     Internal function to handle mutacc data extraction and import to database
 
@@ -70,7 +72,7 @@ def _mutacc_extract_and_import(configfile, case_id, case_yaml):
     :param case_yaml:       The name of the case YAML file
     :return:                None, case added to database
     """
-    sp.run(['mutacc', '--config-file', configfile, 'extract', '--case', case_yaml])
+    sp.run(['mutacc', '--config-file', configfile, 'extract', '--case', case_yaml, '--picard-executable', picard_path])
     sp.run(['mutacc', 'db', 'import', '/.../root_dir/imports/' + str(case_id) + '.mutacc'])
 
 
