@@ -73,7 +73,7 @@ def _mutacc_extract_and_import(configfile, case_id, case_yaml):
     :return:                None, case added to database
     """
     sp.run(['mutacc', '--config-file', configfile, 'extract', '--case', case_yaml, '--picard-executable'])
-    sp.run(['mutacc', 'db', 'import', '/.../root_dir/imports/' + str(case_id) + '.mutacc'])
+    sp.run(['mutacc', 'db', 'import', './mutacc_tests/imports' + str(case_id) + '.mutacc'])
 
 
 # TODO:

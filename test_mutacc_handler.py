@@ -5,7 +5,7 @@ import mutacc_handler
 
 
 class TestMutaccHandler(unittest.TestCase):
-
+    """
     def test_YAML_loading_with_proper_data(self):
         print("Testing Function of yaml loader: ", end="")
         case_id = 'test'
@@ -22,10 +22,10 @@ class TestMutaccHandler(unittest.TestCase):
         with open('test.yaml', 'r') as yaml_handle:
             self.assertEqual(yaml_handle.readline(), "case:\n", msg='Hello there ;)')
         print()
-
+    """
     def test_import_to_database_using_new_data(self):
         print("Testing with new data: ", end="")
-        case_id = 23423
+        case_id = '23423'
         sample_id = 'sample59'
         sex = 'female'
         mother = '0'
@@ -42,6 +42,7 @@ class TestMutaccHandler(unittest.TestCase):
             self.assertEqual(yaml_handle.readline(), "case:\n", msg='Hello there ;)')
         print()
 
+    """
     def test_import_to_database_using_file(self):
         print("Testing with file: ", end="")
         mutacc_handler.import_to_database('test.merged.deduped.sorted.pileup.yaml', 'mutacc_config.yaml')
@@ -52,7 +53,7 @@ class TestMutaccHandler(unittest.TestCase):
             print()
         else:
             print("No such file")
-
+    """
 
 if __name__ == '__main__':
     unittest.main()
