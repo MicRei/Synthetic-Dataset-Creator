@@ -43,7 +43,7 @@ def create_mutations_in_bamfile(mutationtype, variationfile, referencefile, bamf
 
 # TODO:
 #   Function that calls mutacc and adds a bam file and case to the database
-def import_to_database(case_id, configfile, picard_path, *args):
+def import_to_database(case_id, configfile, *args):
     """
     Extracts and imports case into database. Uses either an existing yaml file or creates a new one from args.
 
@@ -51,7 +51,6 @@ def import_to_database(case_id, configfile, picard_path, *args):
 
     :param configfile:  Location of configfile for mutacc.
                         See https://github.com/Clinical-Genomics/mutacc#configuration-file for more information
-    :param picard_path: Path to the picard.jar file
     :param args:        The 8 additional data needed to create a new case;
                             Sample ID of the sample,
                             Gender of the sample,
@@ -83,7 +82,7 @@ def remove_case_from_database(case_id):
 #   Function to create mutation and add it directly to the database
 def mass_synthesize_and_import_to_database(mutationtype, list_of_variationfiles, list_of_referencefiles,
                                            list_of_bamfiles, list_of_outputfiles, nr_procs, list_of_case_ids,
-                                           configfile, picard_path, *matrix_of_args):
+                                           configfile, *matrix_of_args):
     """
     Create more than one(1) mutated bamfile and import them into the database, one at a time.
     :param mutationtype:            Type of mutation to run on all cases.
@@ -94,7 +93,6 @@ def mass_synthesize_and_import_to_database(mutationtype, list_of_variationfiles,
     :param list_of_case_ids:        List of case ID's to be assigned to new cases. Sorted in order of BAM file list.
     :param matrix_of_args:          List containing lists of arguments to use for new data of cases.
                                     Sorted in order of BAM file list.
-    :param picard_path:             Path to the picard.jar file
     :param nr_procs:                Number of processes to use. Default is 1. More is recommended.
 
     :param configfile:              Location of configfile for mutacc.

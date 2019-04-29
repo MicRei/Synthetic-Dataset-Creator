@@ -13,7 +13,7 @@ class MutaccError(Exception):
 # TODO:
 #   Add the YAML file to mutacc database.
 
-def import_to_database(case_id, configfile, picard_path, *args):
+def import_to_database(case_id, configfile, *args):
     """
     Function to create a new data set, or use existing data, and insert it into the mutacc database
 
@@ -53,7 +53,7 @@ def import_to_database(case_id, configfile, picard_path, *args):
             for data in args:
                 new_data.append(data)
             case_yaml = _create_yaml_file(*new_data)
-            _mutacc_extract_and_import(configfile, case_id, case_yaml, picard_path)
+            _mutacc_extract_and_import(configfile, case_id, case_yaml)
 
         else:
             raise MutaccError("Not enough args sent to import or no such file exists. Please supplement your data")
@@ -63,7 +63,7 @@ def import_to_database(case_id, configfile, picard_path, *args):
 
 
 # TODO: add --padding NUMBER to extract subprocess. Make arguments dynamic.
-def _mutacc_extract_and_import(configfile, case_id, case_yaml, picard_path):
+def _mutacc_extract_and_import(configfile, case_id, case_yaml):
     """
     Internal function to handle mutacc data extraction and import to database
 
@@ -72,7 +72,7 @@ def _mutacc_extract_and_import(configfile, case_id, case_yaml, picard_path):
     :param case_yaml:       The name of the case YAML file
     :return:                None, case added to database
     """
-    sp.run(['mutacc', '--config-file', configfile, 'extract', '--case', case_yaml, '--picard-executable', picard_path])
+    sp.run(['mutacc', '--config-file', configfile, 'extract', '--case', case_yaml, '--picard-executable'])
     sp.run(['mutacc', 'db', 'import', '/.../root_dir/imports/' + str(case_id) + '.mutacc'])
 
 
