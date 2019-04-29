@@ -5,15 +5,9 @@ File to handle user interactions.
 import mutacc_handler as mach
 import bamsurgeon_handler as bamh
 
-
 class UserError(Exception):
     pass
 
-
-# TODO:
-#   Figure out what arguments to use.
-#   Add a parser that reads all arguments and stores them.
-#   Allow the stored arguments to be used by the correct function.
 
 # TODO:
 #   Add more arguments in case user wants to use more arguments
@@ -41,16 +35,14 @@ def create_mutations_in_bamfile(mutationtype, variationfile, referencefile, bamf
         print('An error occurred with the parameters for BAMSurgeon: ', e)
 
 
-# TODO:
-#   Function that calls mutacc and adds a bam file and case to the database
-def import_to_database(case_id, configfile, *args):
+def import_to_database(case_id, configfile, padding, *args):
     """
     Extracts and imports case into database. Uses either an existing yaml file or creates a new one from args.
 
     :param case_id:     ID of case; can be either a number or a string of letters.
-
     :param configfile:  Location of configfile for mutacc.
                         See https://github.com/Clinical-Genomics/mutacc#configuration-file for more information
+    :param padding:     Length of padding around desired region.
     :param args:        The 8 additional data needed to create a new case;
                             Sample ID of the sample,
                             Gender of the sample,
@@ -64,22 +56,24 @@ def import_to_database(case_id, configfile, *args):
                         For an example, see https://github.com/Clinical-Genomics/mutacc#populate-the-mutacc-database
     :return:
     """
-    mach.import_to_database(case_id, configfile, picard_path, *args)
+    if args is None or len(args) == 8:
+        mach.import_to_database(case_id, configfile, padding, *args)
+    else:
+        raise UserError('Not enough arguments or too many arguments sent. Please look over them.')
 
 
-# TODO:
-#   Function to remove case from database
-def remove_case_from_database(case_id):
+def remove_case_from_database(case_id, configfile):
     """
     Removes specified case from the database.
-    :param case_id: ID of case to remove, NOT sample. Will remove all samples of the specified case.
-    :return: Removal of case from database
+    :param case_id:     ID of case to remove, NOT sample. Will remove all samples of the specified case.
+    :param configfile:  Location of configfile for mutacc.
+                        See https://github.com/Clinical-Genomics/mutacc#configuration-file
+                        for more information.
+    :return:            Removal of case from database
     """
-    mach.remove_from_database(case_id)
+    mach.remove_from_database(case_id, configfile)
 
 
-# TODO:
-#   Function to create mutation and add it directly to the database
 def mass_synthesize_and_import_to_database(mutationtype, list_of_variationfiles, list_of_referencefiles,
                                            list_of_bamfiles, list_of_outputfiles, nr_procs, list_of_case_ids,
                                            configfile, *matrix_of_args):
@@ -94,7 +88,6 @@ def mass_synthesize_and_import_to_database(mutationtype, list_of_variationfiles,
     :param matrix_of_args:          List containing lists of arguments to use for new data of cases.
                                     Sorted in order of BAM file list.
     :param nr_procs:                Number of processes to use. Default is 1. More is recommended.
-
     :param configfile:              Location of configfile for mutacc.
                                     See https://github.com/Clinical-Genomics/mutacc#configuration-file
                                     for more information.
@@ -102,8 +95,7 @@ def mass_synthesize_and_import_to_database(mutationtype, list_of_variationfiles,
     :return:
     """
     mutationtype, nr_procs, configfile = mutationtype, nr_procs, configfile
-
-    # TODO: loop through all the files below and call create_mutations + import_to_database for each file/case.
+    matrix = matrix_of_args
 
     for case in list_of_case_ids:
         case_id = list_of_case_ids(case)
@@ -111,13 +103,11 @@ def mass_synthesize_and_import_to_database(mutationtype, list_of_variationfiles,
         referencefile = list_of_referencefiles(case)
         bamfile = list_of_bamfiles(case)
         outputfile = list_of_outputfiles(case)
-        args = matrix_of_args(case)
+        args = matrix(case)
         create_mutations_in_bamfile(mutationtype, variationfile, referencefile, bamfile, outputfile, nr_procs)
-        import_to_database(case_id, configfile, picard_path, *args)
+        import_to_database(case_id, configfile, *args)
 
 
-# TODO:
-#   Function to retrieve a case from the database and synthesize it
 def create_dataset(configfile, member, background_bam, background_fastq1, background_fastq2, *args):
     """
     Creates a dataset of the specified case/-s from the database. More information can be found at
