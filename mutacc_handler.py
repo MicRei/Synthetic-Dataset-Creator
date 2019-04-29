@@ -71,7 +71,8 @@ def _mutacc_extract_and_import(configfile, case_id, case_yaml):
     :return:                None, case added to database
     """
     sp.run(['mutacc', '--config-file', configfile, 'extract', '--case', case_yaml])
-    sp.run(['mutacc', '--config-file', configfile, 'db', 'import', '/home/mire/PycharmProjects/project_test/mutacc_tests/imports/' + str(case_id) + '_import.mutacc'])
+    sp.run(['mutacc', '--config-file', configfile, 'db', 'import',
+            '/home/mire/PycharmProjects/project_test/mutacc_tests/imports/' + str(case_id) + '_import.mutacc'])
 
 
 # TODO:

@@ -23,6 +23,7 @@ class TestMutaccHandler(unittest.TestCase):
             self.assertEqual(yaml_handle.readline(), "case:\n", msg='Hello there ;)')
         print()
     """
+
     def test_import_to_database_using_new_data(self):
         print("Testing with new data: ", end="")
         case_id = '23423'
@@ -54,6 +55,7 @@ class TestMutaccHandler(unittest.TestCase):
         else:
             print("No such file")
     """
+
 
 if __name__ == '__main__':
     unittest.main()
