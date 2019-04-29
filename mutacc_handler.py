@@ -22,8 +22,6 @@ def import_to_database(case_id, configfile, *args):
     :param configfile:  Config file containing the root directory of mutaccfiles.
                         See https://github.com/Clinical-Genomics/mutacc#configuration-file for more information
 
-    :param picard_path: Path to the picard.jar file
-
     :param args:        The 8 additional data needed to create a new case;
                             Sample ID of the sample,
                             Gender of the sample,
@@ -72,8 +70,8 @@ def _mutacc_extract_and_import(configfile, case_id, case_yaml):
     :param case_yaml:       The name of the case YAML file
     :return:                None, case added to database
     """
-    sp.run(['mutacc', '--config-file', configfile, 'extract', '--case', case_yaml, '--picard-executable'])
-    sp.run(['mutacc', 'db', 'import', './mutacc_tests/imports' + str(case_id) + '.mutacc'])
+    sp.run(['mutacc', '--config-file', configfile, 'extract', '--case', case_yaml])
+    sp.run(['mutacc', '--config-file', configfile, 'db', 'import', '/home/mire/PycharmProjects/project_test/mutacc_tests/imports/' + str(case_id) + '_import.mutacc'])
 
 
 # TODO:
@@ -109,7 +107,7 @@ def remove_from_database(case):
     :param case: Case ID of the desired case.
     :return: None
     """
-    sp.run(['mutacc', '--config-file', './mutacc_config.yaml', 'db', 'remove', case])
+    sp.run(['mutacc', '--config-file', './mutacc_config.yaml', './mutacc_config.yaml', 'db', 'remove', case])
 
 
 def _create_yaml_file(case_id, sample_id, sex, mother, father, bam, analysis, phenotype, variants):

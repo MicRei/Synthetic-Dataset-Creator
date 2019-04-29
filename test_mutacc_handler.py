@@ -30,10 +30,10 @@ class TestMutaccHandler(unittest.TestCase):
         sex = 'female'
         mother = '0'
         father = '0'
-        bam = './here.bam'
+        bam = './NA12878_mybam.sorted.bam'
         analysis = 'TP53'
         phenotype = 'affected'
-        variants = './my.vcf'
+        variants = './57742.vcf'
         configfile = './mutacc_config.yaml'
 
         mutacc_handler.import_to_database(case_id, configfile, sample_id, sex, mother, father, bam, analysis, phenotype,
