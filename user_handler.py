@@ -26,7 +26,7 @@ def create_mutations_in_bamfile(mutationtype, variationfile, referencefile, bamf
     """
     try:
         if outputfile is None:
-            outputfile = bamfile + '.mutated.bam'
+            outputfile = bamfile
 
         if type(nr_procs) != int:
             print(type(nr_procs))
