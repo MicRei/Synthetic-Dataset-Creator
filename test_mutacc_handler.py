@@ -5,7 +5,7 @@ import mutacc_handler
 
 
 class TestMutaccHandler(unittest.TestCase):
-    """
+
     def test_YAML_loading_with_proper_data(self):
         print("Testing Function of yaml loader: ", end="")
         case_id = 'test'
@@ -22,7 +22,6 @@ class TestMutaccHandler(unittest.TestCase):
         with open('test.yaml', 'r') as yaml_handle:
             self.assertEqual(yaml_handle.readline(), "case:\n", msg='Hello there ;)')
         print()
-    """
 
     def test_import_to_database_using_new_data(self):
         print("Testing with new data: ", end="")
@@ -38,7 +37,8 @@ class TestMutaccHandler(unittest.TestCase):
         configfile = './mutacc_config.yaml'
         padding = '160'
 
-        mutacc_handler.import_to_database(case_id, configfile, padding, sample_id, sex, mother, father, bam, analysis, phenotype,
+        mutacc_handler.import_to_database(case_id, configfile, padding, sample_id, sex, mother, father, bam, analysis,
+                                          phenotype,
                                           variants)
         with open('test.yaml', 'r') as yaml_handle:
             self.assertEqual(yaml_handle.readline(), "case:\n", msg='Hello there ;)')

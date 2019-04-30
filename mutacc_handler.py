@@ -69,7 +69,7 @@ def _mutacc_extract_and_import(configfile, case_id, padding, case_yaml):
 
 
 def export_from_database(configfile, background_bam, background_fastq1, background_fastq2, member='affected',
-                         case='{}'):
+                         case=None):
     """
     Export a case from the database and create a dataset, stored as FASTQ, from it. More information can be found at
         https://github.com/Clinical-Genomics/mutacc#export-datasets-from-the-database.
@@ -83,10 +83,12 @@ def export_from_database(configfile, background_bam, background_fastq1, backgrou
     :param case:                Specific case to look for.
     :return:                    Outputs fastq files related to the synthetic dataset created.
     """
+    if case is None:
+        case = '{}'
     sp.run(['mutacc', '--config-file', configfile, 'db', 'export', '-m', member, '-c', case])
     sp.run(
         ['mutacc', '--config-file', configfile, 'synthesize', '-b', background_bam, '-f', background_fastq1, '-f2',
-         background_fastq2, '-q', 'child_query.mutacc'])
+         background_fastq2, '-q', '/home/mire/PycharmProjects/project_test/mutacc_tests/queries/affected_query.mutacc'])
 
 
 def remove_from_database(case, configfile):
@@ -100,6 +102,7 @@ def remove_from_database(case, configfile):
     :return:            None.
     """
     sp.run(['mutacc', '--config-file', configfile, 'db', 'remove', case])
+    print("DONE")
 
 
 def _create_yaml_file(case_id, sample_id, sex, mother, father, bam, analysis, phenotype, variants):

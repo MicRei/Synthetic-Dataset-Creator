@@ -5,6 +5,7 @@ File to handle user interactions.
 import mutacc_handler as mach
 import bamsurgeon_handler as bamh
 
+
 class UserError(Exception):
     pass
 
@@ -27,7 +28,9 @@ def create_mutations_in_bamfile(mutationtype, variationfile, referencefile, bamf
         if outputfile is None:
             outputfile = bamfile + '.mutated.bam'
 
-        if nr_procs is not int:
+        if type(nr_procs) != int:
+            print(type(nr_procs))
+            print(nr_procs)
             raise UserError("Please use a number to specify the number of threads and not words")
         else:
             bamh.create_mutations(mutationtype, variationfile, referencefile, bamfile, outputfile, nr_procs)
@@ -74,41 +77,65 @@ def remove_case_from_database(case_id, configfile):
     mach.remove_from_database(case_id, configfile)
 
 
-def mass_synthesize_and_import_to_database(mutationtype, list_of_variationfiles, list_of_referencefiles,
-                                           list_of_bamfiles, list_of_outputfiles, nr_procs, list_of_case_ids,
-                                           configfile, *matrix_of_args):
+def mass_mutate_and_import_to_database(mutationtype, configfile, padding, list_of_variationfiles,
+                                       list_of_referencefiles, list_of_bamfiles, list_of_case_ids,
+                                       list_of_outputfiles=None, matrix_of_args=None, nr_procs=1):
     """
     Create more than one(1) mutated bamfile and import them into the database, one at a time.
     :param mutationtype:            Type of mutation to run on all cases.
-    :param list_of_variationfiles:  List of BED files to use on BAM files. Sorted in order of BAM file list.
-    :param list_of_referencefiles:  List of fasta genome files to use with BAM files. Sorted in order of BAM file list.
-    :param list_of_bamfiles:        List of BAM files to mutate.
-    :param list_of_outputfiles:     List of names for mutated BAM files. Sorted in order of BAM file list.
-    :param list_of_case_ids:        List of case ID's to be assigned to new cases. Sorted in order of BAM file list.
-    :param matrix_of_args:          List containing lists of arguments to use for new data of cases.
+    :param list_of_variationfiles:  Tuple of BED files to use on BAM files. Sorted in order of BAM file list.
+    :param list_of_referencefiles:  Tuple of fasta genome files to use with BAM files. Sorted in order of BAM file list.
+    :param list_of_bamfiles:        Tuple of BAM files to mutate.
+    :param list_of_outputfiles:     Tuple of names for mutated BAM files. Sorted in order of BAM file list.
+    :param list_of_case_ids:        Tuple of case ID's to be assigned to new cases. Sorted in order of BAM file list.
+    :param matrix_of_args:          Tuple containing tuples of arguments to use for new data of cases.
                                     Sorted in order of BAM file list.
     :param nr_procs:                Number of processes to use. Default is 1. More is recommended.
     :param configfile:              Location of configfile for mutacc.
                                     See https://github.com/Clinical-Genomics/mutacc#configuration-file
                                     for more information.
 
-    :return:
+    :return:                        None, imports all cases to database
     """
     mutationtype, nr_procs, configfile = mutationtype, nr_procs, configfile
-    matrix = matrix_of_args
 
     for case in list_of_case_ids:
-        case_id = list_of_case_ids(case)
-        variationfile = list_of_variationfiles(case)
-        referencefile = list_of_referencefiles(case)
-        bamfile = list_of_bamfiles(case)
-        outputfile = list_of_outputfiles(case)
-        args = matrix(case)
+
+        position = list_of_case_ids.index(case)
+        case_id = list_of_case_ids[position]
+        variationfile = list_of_variationfiles[position]
+        referencefile = list_of_referencefiles[position]
+        bamfile = list_of_bamfiles[position]
+        args = matrix_of_args[position]
+        if list_of_outputfiles is None:
+            outputfile = bamfile + '.mutated.bam'
+        else:
+            outputfile = list_of_outputfiles[position]
+        # print("case_id is: ", end="")
+        # print(case_id)
+        # print("variationfile is: ", end="")
+        # print(variationfile)
+        # print("referencefile is: ", end="")
+        # print(referencefile)
+        # print("bamfile is: ", end="")
+        # print(bamfile)
+        # print("args are: ", end="")
+        # print(args)
+        # print("number of args are: ", end="")
+        # print(len(args))
+        # print("outputfile is: ", end="")
+        # print(outputfile)
+        # print("\n\n")
+        bamposition = args.index(bamfile)
+        args[bamposition] = outputfile
+        print("============")
+        print(args)
+        print("============")
         create_mutations_in_bamfile(mutationtype, variationfile, referencefile, bamfile, outputfile, nr_procs)
-        import_to_database(case_id, configfile, *args)
+        import_to_database(case_id, configfile, padding, *args)
 
 
-def create_dataset(configfile, member, background_bam, background_fastq1, background_fastq2, *args):
+def create_dataset(configfile, background_bam, background_fastq1, background_fastq2, member='affected', *args):
     """
     Creates a dataset of the specified case/-s from the database. More information can be found at
         https://github.com/Clinical-Genomics/mutacc#export-datasets-from-the-database
@@ -122,4 +149,48 @@ def create_dataset(configfile, member, background_bam, background_fastq1, backgr
     :param args:
     :return:
     """
-    mach.export_from_database(configfile, member, background_bam, background_fastq1, background_fastq2, args)
+    mach.export_from_database(configfile, background_bam, background_fastq1, background_fastq2, member, args)
+
+
+if __name__ == '__main__':
+    """
+    mass_mutate_and_import_to_database('addsnv', './mutacc_config.yaml', '160',
+                                       ('/home/mire/PycharmProjects/project_files/mychr17snv1.bed', ),
+                                       '/home/mire/PycharmProjects/fasta_hg38/hg38',
+                                       '/home/mire/PycharmProjects/project_test/NA12878_mybam.sorted.bam', '434343',
+                                       ('434343', 'sample43', 'female', '0', '0',
+                                        '/home/mire/PycharmProjects/project_test/NA12878_mybam.sorted.bam', 'heart',
+                                        'affected', '/home/mire/PycharmProjects/project_test/testcases/23423.vcf',
+                                        './mutacc_config.yaml', '160'), nr_procs=30)
+
+    """
+    mass_mutate_and_import_to_database(nr_procs=30, mutationtype='addsnv', configfile='./mutacc_config.yaml',
+                                       padding='160',
+
+                                       list_of_variationfiles=[
+                                           '/home/mire/PycharmProjects/project_files/mychr17snv1.bed',
+                                           '/home/mire/PycharmProjects/project_files/mychr17snv1.bed',
+                                           '/home/mire/PycharmProjects/project_files/mychr17snv1.bed'],
+
+                                       list_of_referencefiles=['/home/mire/PycharmProjects/fasta_hg38/hg38.fa',
+                                                               '/home/mire/PycharmProjects/fasta_hg38/hg38.fa',
+                                                               '/home/mire/PycharmProjects/fasta_hg38/hg38.fa'],
+
+                                       list_of_bamfiles=['/home/mire/PycharmProjects/hg38/NA12878twist.sorted.bam',
+                                                         '/home/mire/PycharmProjects/hg38/NA12878west.sorted.bam',
+                                                         '/home/mire/PycharmProjects/project_test/NA12878_mybam.sorted.bam'],
+
+                                       list_of_case_ids=['45664', '45763', '45121'],
+
+                                       matrix_of_args=[['sample99', 'female', '0', '0',
+                                                        '/home/mire/PycharmProjects/hg38/NA12878twist.sorted.bam',
+                                                        'wgs', 'affected',
+                                                        '/home/mire/PycharmProjects/project_test/testcases/57742.vcf'],
+                                                       ['sample22', 'female', '0', '0',
+                                                        '/home/mire/PycharmProjects/hg38/NA12878west.sorted.bam',
+                                                        'TP53', 'affected',
+                                                        '/home/mire/PycharmProjects/project_test/testcases/57745.vcf'],
+                                                       ['sample43', 'female', '0', '0',
+                                                        '/home/mire/PycharmProjects/project_test/NA12878_mybam.sorted.bam',
+                                                        'heart', 'affected',
+                                                        '/home/mire/PycharmProjects/project_test/testcases/57744.vcf']])
