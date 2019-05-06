@@ -3,6 +3,7 @@ File to handle mutacc interaction.
 """
 import yaml
 import subprocess as sp
+from re import search
 from pathlib import Path
 
 
@@ -63,9 +64,13 @@ def _mutacc_extract_and_import(configfile, case_id, padding, case_yaml):
     :param case_yaml:       The name of the case YAML file.
     :return:                None, case added to database.
     """
+    with open(configfile, 'r') as config_handle:
+        root_dir = search("root_dir", config_handle.read()).string.split(" ")[1].strip("\n")
+
+    path_to_imported_case = root_dir + 'imports/' + str(case_id) + '_import.mutacc'
+
     sp.run(['mutacc', '--config-file', configfile, 'extract', '--padding', padding, '--case', case_yaml])
-    sp.run(['mutacc', '--config-file', configfile, 'db', 'import',
-            '/home/mire/PycharmProjects/project_test/mutacc_tests/imports/' + str(case_id) + '_import.mutacc'])
+    sp.run(['mutacc', '--config-file', configfile, 'db', 'import', path_to_imported_case])
 
 
 def export_from_database(configfile, background_bam, background_fastq1, background_fastq2, member='affected',
@@ -83,12 +88,17 @@ def export_from_database(configfile, background_bam, background_fastq1, backgrou
     :param case:                Specific case to look for.
     :return:                    Outputs fastq files related to the synthetic dataset created.
     """
+    with open(configfile, 'r') as config_handle:
+        root_dir = search("root_dir", config_handle.read()).string.split(" ")[1].strip("\n")
+
+    path_to_query = root_dir + 'queries/affected_query.mutacc'
+
     if case is None:
         case = '{}'
     sp.run(['mutacc', '--config-file', configfile, 'db', 'export', '-m', member, '-c', case])
     sp.run(
         ['mutacc', '--config-file', configfile, 'synthesize', '-b', background_bam, '-f', background_fastq1, '-f2',
-         background_fastq2, '-q', '/home/mire/PycharmProjects/project_test/mutacc_tests/queries/affected_query.mutacc'])
+         background_fastq2, '-q', path_to_query])
 
 
 def remove_from_database(case, configfile):
