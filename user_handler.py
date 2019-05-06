@@ -60,6 +60,8 @@ def import_to_database(case_id, configfile, padding, *args):
     :return:
     """
     if args is None or len(args) == 8:
+        mach.import_to_database(case_id, configfile, padding)
+    elif len(args) == 8:
         mach.import_to_database(case_id, configfile, padding, *args)
     else:
         raise UserError('Not enough arguments or too many arguments sent. Please look over them.')
@@ -83,6 +85,7 @@ def mass_mutate_and_import_to_database(mutationtype, configfile, padding, list_o
     """
     Create more than one(1) mutated bamfile and import them into the database, one at a time.
     :param mutationtype:            Type of mutation to run on all cases.
+    :param padding:                 How much padding around the variance of interest there should be.
     :param list_of_variationfiles:  Tuple of BED files to use on BAM files. Sorted in order of BAM file list.
     :param list_of_referencefiles:  Tuple of fasta genome files to use with BAM files. Sorted in order of BAM file list.
     :param list_of_bamfiles:        Tuple of BAM files to mutate.
@@ -133,36 +136,8 @@ def create_dataset(configfile, background_bam, background_fastq1, background_fas
     """
     mach.export_from_database(configfile, background_bam, background_fastq1, background_fastq2, member, args)
 
+
 # TODO:
 #       Allow calling of any function in this file.
 if __name__ == '__main__':
-    mass_mutate_and_import_to_database(nr_procs=30, mutationtype='addsnv', configfile='./mutacc_config.yaml',
-                                       padding='160',
-
-                                       list_of_variationfiles=[
-                                           '/home/mire/PycharmProjects/project_files/mychr17snv1.bed',
-                                           '/home/mire/PycharmProjects/project_files/mychr17snv1.bed',
-                                           '/home/mire/PycharmProjects/project_files/mychr17snv1.bed'],
-
-                                       list_of_referencefiles=['/home/mire/PycharmProjects/fasta_hg38/hg38.fa',
-                                                               '/home/mire/PycharmProjects/fasta_hg38/hg38.fa',
-                                                               '/home/mire/PycharmProjects/fasta_hg38/hg38.fa'],
-
-                                       list_of_bamfiles=['/home/mire/PycharmProjects/hg38/NA12878twist.sorted.bam',
-                                                         '/home/mire/PycharmProjects/hg38/NA12878west.sorted.bam',
-                                                         '/home/mire/PycharmProjects/project_test/NA12878_mybam.sorted.bam'],
-
-                                       list_of_case_ids=['45664', '45763', '45121'],
-
-                                       matrix_of_args=[['sample99', 'female', '0', '0',
-                                                        '/home/mire/PycharmProjects/hg38/NA12878twist.sorted.bam',
-                                                        'wgs', 'affected',
-                                                        '/home/mire/PycharmProjects/project_test/testcases/57742.vcf'],
-                                                       ['sample22', 'female', '0', '0',
-                                                        '/home/mire/PycharmProjects/hg38/NA12878west.sorted.bam',
-                                                        'TP53', 'affected',
-                                                        '/home/mire/PycharmProjects/project_test/testcases/57745.vcf'],
-                                                       ['sample43', 'female', '0', '0',
-                                                        '/home/mire/PycharmProjects/project_test/NA12878_mybam.sorted.bam',
-                                                        'heart', 'affected',
-                                                        '/home/mire/PycharmProjects/project_test/testcases/57744.vcf']])
+    print("Hello there SAILOR!")

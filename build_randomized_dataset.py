@@ -6,6 +6,7 @@ import re
 import pymongo as mongo
 import mutacc_handler as muth
 
+
 # TODO: ADD IN REFERENCE DATA TO THE SYNTHEZISED BAM AND FASTQ FILES
 
 def create_randomized_dataset(case_db_configfile, synth_db_configfile, background_bam, background_fastq1,
@@ -36,7 +37,6 @@ def create_randomized_dataset(case_db_configfile, synth_db_configfile, backgroun
 
     mutacc_import = ['mutacc', '--config-file', synth_db_configfile, 'db', 'import']
 
-
     # TODO: randomize this! Do not use all cases, but use instead a random number of cases.
     for case in case_id_list:
         mutacc_import.append(path_to_import_dir + case + '_import.mutacc')
@@ -48,6 +48,6 @@ def create_randomized_dataset(case_db_configfile, synth_db_configfile, backgroun
     with open(synth_db_configfile, 'r') as synth_db_handle:
 
         servername = re.search("database.*", synth_db_handle.read()).group().split(": ")[1]
-        synthesizer_Database = mongo.MongoClient()
-        synthesizer_Database.drop_database(servername)
-        synthesizer_Database.close()
+        synthesizer_database = mongo.MongoClient()
+        synthesizer_database.drop_database(servername)
+        synthesizer_database.close()
