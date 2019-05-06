@@ -113,9 +113,6 @@ def mass_mutate_and_import_to_database(mutationtype, configfile, padding, list_o
             outputfile = list_of_outputfiles[position]
         bamposition = args.index(bamfile)
         args[bamposition] = outputfile
-        print("============")
-        print(args)
-        print("============")
         create_mutations_in_bamfile(mutationtype, variationfile, referencefile, bamfile, outputfile, nr_procs)
         import_to_database(case_id, configfile, padding, *args)
 
