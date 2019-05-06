@@ -133,19 +133,9 @@ def create_dataset(configfile, background_bam, background_fastq1, background_fas
     """
     mach.export_from_database(configfile, background_bam, background_fastq1, background_fastq2, member, args)
 
-
+# TODO:
+#       Allow calling of any function in this file.
 if __name__ == '__main__':
-    """
-    mass_mutate_and_import_to_database('addsnv', './mutacc_config.yaml', '160',
-                                       ('/home/mire/PycharmProjects/project_files/mychr17snv1.bed', ),
-                                       '/home/mire/PycharmProjects/fasta_hg38/hg38',
-                                       '/home/mire/PycharmProjects/project_test/NA12878_mybam.sorted.bam', '434343',
-                                       ('434343', 'sample43', 'female', '0', '0',
-                                        '/home/mire/PycharmProjects/project_test/NA12878_mybam.sorted.bam', 'heart',
-                                        'affected', '/home/mire/PycharmProjects/project_test/testcases/23423.vcf',
-                                        './mutacc_config.yaml', '160'), nr_procs=30)
-
-    """
     mass_mutate_and_import_to_database(nr_procs=30, mutationtype='addsnv', configfile='./mutacc_config.yaml',
                                        padding='160',
 

@@ -11,6 +11,11 @@ def create_mutations(mutationtype, variationfile, referencefile, bamfile, output
         Create mutation based on userinput in bamfile data based on positions given in variationfile and print
          them to outputfile.
 
+        :param mutationtype:    mutation type to perform: addsnv, addsv, or addindel;
+                                    addsnv adds a single nucleotide variance
+                                    addsv adds a structural variance
+                                    addindel adds the specified nucleotides or deletes the specified region.
+                                    See https://github.com/adamewing/bamsurgeon for better specifications.
         :param variationfile:   BED file specifying position to mutate, optionally with the desired base.
         :param referencefile:   FASTA file containing the genome the sample is mapped against.
         :param bamfile:         BAM file containing the sample reads.
