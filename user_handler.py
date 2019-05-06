@@ -111,21 +111,6 @@ def mass_mutate_and_import_to_database(mutationtype, configfile, padding, list_o
             outputfile = bamfile + '.mutated.bam'
         else:
             outputfile = list_of_outputfiles[position]
-        # print("case_id is: ", end="")
-        # print(case_id)
-        # print("variationfile is: ", end="")
-        # print(variationfile)
-        # print("referencefile is: ", end="")
-        # print(referencefile)
-        # print("bamfile is: ", end="")
-        # print(bamfile)
-        # print("args are: ", end="")
-        # print(args)
-        # print("number of args are: ", end="")
-        # print(len(args))
-        # print("outputfile is: ", end="")
-        # print(outputfile)
-        # print("\n\n")
         bamposition = args.index(bamfile)
         args[bamposition] = outputfile
         print("============")
