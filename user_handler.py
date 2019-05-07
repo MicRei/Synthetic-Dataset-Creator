@@ -141,5 +141,5 @@ def create_dataset(configfile, background_bam, background_fastq1, background_fas
 
 # TODO:
 #       Allow calling of any function in this file.
-if __name__ == '__main__':
-    print("Hello there SAILOR!")
+# if __name__ == '__main__':
+#     print("Hello there SAILOR!")

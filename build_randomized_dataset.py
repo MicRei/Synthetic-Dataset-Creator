@@ -10,7 +10,7 @@ import mutacc_handler as muth
 # TODO: ADD IN REFERENCE DATA TO THE SYNTHESISED BAM AND FASTQ FILES
 
 def create_randomized_dataset(case_db_configfile, synth_db_configfile, background_bam, background_fastq1,
-                              background_fastq2):
+                              background_fastq2, reference_data_fq1=None, reference_data_fq2=None):
     """
     Create a new database to load with random variants to use in a dataset.
     :param case_db_configfile:  Configfile with path to root directory of mutacc.
@@ -18,8 +18,14 @@ def create_randomized_dataset(case_db_configfile, synth_db_configfile, backgroun
     :param background_bam:      BAM to use as background for dataset.
     :param background_fastq1:   First FastQ to use as background for dataset
     :param background_fastq2:   Second FastQ to use as background for dataset, pair-ended analysis.
+    :param reference_data_fq1:  Reference data to add to the sampling pool. FastQ , pairended format.
+    :param reference_data_fq2:  Reference data to add to the sampling pool. Complementary list to reference_Data_fq1.
     :return: None, synthesizes a dataset
     """
+    if reference_data_fq1 is not None and reference_data_fq2 is not None:
+        reference_data_fastq1 = reference_data_fq1
+        referen_data_paired = reference_data_fq2
+
     mutacc_view = ['mutacc', '--config-file', case_db_configfile, 'db', 'view', '-c', '{}']
 
     # find all ID's of cases in the database and add them to a list
@@ -51,3 +57,11 @@ def create_randomized_dataset(case_db_configfile, synth_db_configfile, backgroun
         synthesizer_database = mongo.MongoClient()
         synthesizer_database.drop_database(servername)
         synthesizer_database.close()
+
+    # TODO: Randomize reference data to use. Add that to the above randomization?
+
+    # TODO: Exclude overlapping fastq data, if present
+
+    # TODO: Concatenate the reference_data to their respective synthetic fastq file.
+    #   ex:     sp.run(['cat', 'synthetic_fastq_1', 'reference_data_fastq1'])
+    #           sp.run(['cat', 'synthetic_fastq_2', 'reference_data_paired'])
