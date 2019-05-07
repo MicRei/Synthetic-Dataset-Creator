@@ -6,7 +6,7 @@ import re
 import pymongo as mongo
 from Synthetic_Dataset_Creator import mutacc_handler as muth
 import random
-
+from os import listdir
 
 def create_randomized_dataset(case_db_configfile, synth_db_configfile, background_bam, background_fastq1,
                               background_fastq2, reference_data_fq1=[], reference_data_fq2=[]):
@@ -30,6 +30,8 @@ def create_randomized_dataset(case_db_configfile, synth_db_configfile, backgroun
             and len(reference_data_fq1) == len(reference_data_fq2):
         dict_of_referencedata = pair_reference_fastq_files(reference_data_fq1, reference_data_fq2)
         caselist.extend(reference_data_fq1)
+    else:
+        dict_of_referencedata = {}
 
     if len(caselist) == 1:
         randomized_list = caselist
@@ -41,21 +43,32 @@ def create_randomized_dataset(case_db_configfile, synth_db_configfile, backgroun
 
     chosen_references = []
     chosen_references_pair = []
-    for sample in randomized_list:
-        if sample in dict_of_referencedata:
-            chosen_references.append(reference_data_fq1[reference_data_fq1.index(sample)])
-            chosen_references_pair.append(dict_of_referencedata.get(sample))
-
+    if len(dict_of_referencedata) != 0:
+        for sample in randomized_list:
+            if sample in dict_of_referencedata:
+                chosen_references.append(reference_data_fq1[reference_data_fq1.index(sample)])
+                chosen_references_pair.append(dict_of_referencedata.get(sample))
+    else:
+        chosen_references = {}
 
     # TODO: Exclude overlapping fastq data, if present
-    # TODO: Concatenate the reference_data to their respective synthetic fastq file.
-    #   ex:     sp.run(['cat', 'synthetic_fastq_1', 'reference_data_fastq1'])
-    #           sp.run(['cat', 'synthetic_fastq_2', 'reference_data_paired'])
+
+    root_dir = get_root_dir_path(synth_db_configfile)
+    path_to_synthetic_datasets = root_dir + 'datasets/'
+    synthetic_fqs = listdir(path_to_synthetic_datasets)
+    if len(chosen_references) > 0:
+        for fq_file in range(len(chosen_references)):
+            sp.run(['cat', synthetic_fqs[0], chosen_references[fq_file]])
+            sp.run(['cat', synthetic_fqs[1], chosen_references_pair[fq_file]])
+
+
 
 
 def create_synthesized_dataset_from_database(background_bam, background_fastq1, background_fastq2, caselist,
                                              mutacc_import, case_db_configfile, randomized_list, synth_db_configfile):
-    path_to_import_dir = get_import_dir_path(case_db_configfile)
+    root_dir = get_root_dir_path(case_db_configfile)
+    path_to_import_dir = root_dir + 'imports/'
+
     for case in randomized_list:
         if case in caselist:
             mutacc_import.append(path_to_import_dir + case + '_import.mutacc')
@@ -77,11 +90,10 @@ def pair_reference_fastq_files(reference_data_fq1, reference_data_fq2):
     return paired_reference_data
 
 
-def get_import_dir_path(case_db_configfile):
+def get_root_dir_path(case_db_configfile):
     with open(case_db_configfile, 'r') as config_handle:
         root_dir = re.search("root_dir", config_handle.read()).string.split(" ")[1].strip("\n")
-    path_to_import_dir = root_dir + 'imports/'
-    return path_to_import_dir
+    return root_dir
 
 
 def extract_case_ids(case_db_configfile):
