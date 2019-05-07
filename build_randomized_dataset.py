@@ -5,6 +5,7 @@ import subprocess as sp
 import re
 import pymongo as mongo
 import mutacc_handler as muth
+import random
 
 
 # TODO: ADD IN REFERENCE DATA TO THE SYNTHESISED BAM AND FASTQ FILES
@@ -22,10 +23,6 @@ def create_randomized_dataset(case_db_configfile, synth_db_configfile, backgroun
     :param reference_data_fq2:  Reference data to add to the sampling pool. Complementary list to reference_Data_fq1.
     :return: None, synthesizes a dataset
     """
-    if reference_data_fq1 is not None and reference_data_fq2 is not None:
-        reference_data_fastq1 = reference_data_fq1
-        referen_data_paired = reference_data_fq2
-
     mutacc_view = ['mutacc', '--config-file', case_db_configfile, 'db', 'view', '-c', '{}']
 
     # find all ID's of cases in the database and add them to a list
@@ -43,7 +40,18 @@ def create_randomized_dataset(case_db_configfile, synth_db_configfile, backgroun
 
     mutacc_import = ['mutacc', '--config-file', synth_db_configfile, 'db', 'import']
 
-    # TODO: randomize this! Do not use all cases, but use instead a random number of cases.
+    # TODO: randomize sampling! Use 67 % of cases.
+    if reference_data_fq1 is not None and reference_data_fq2 is not None \
+            and len(reference_data_fq1) == len(reference_data_fq2):
+        reference_data_fastq1 = reference_data_fq1
+        referen_data_paired = reference_data_fq2
+
+    caselist = []  # add all samples: reference fastq and mutacc cases
+
+    randomized_list = random.sample(caselist, int(len(caselist) * 0.67))
+
+    caselist.
+    # for case in case_id_list and in caselist.
     for case in case_id_list:
         mutacc_import.append(path_to_import_dir + case + '_import.mutacc')
         sp.run(mutacc_import)
