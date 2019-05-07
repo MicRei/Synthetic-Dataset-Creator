@@ -64,7 +64,9 @@ def import_to_database(case_id, configfile, padding, *args):
     elif len(args) == 8:
         mach.import_to_database(case_id, configfile, padding, *args)
     else:
-        raise UserError('Not enough arguments or too many arguments sent. Please look over them.')
+        raise UserError(
+            'Not enough arguments or too many arguments sent. Please look over them as only 0(zero) or '
+            '8(eight) additional arguments are accepted')
 
 
 def remove_case_from_database(case_id, configfile):

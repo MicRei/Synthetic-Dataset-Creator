@@ -41,9 +41,7 @@ def import_to_database(case_id, configfile, padding, *args):
                     _mutacc_extract_and_import(configfile, yaml_case.name, padding, case_id)
         elif len(args) == 8:
             new_data = [case_id]
-
-            for data in args:
-                new_data.append(data)
+            new_data.extend(args)
             case_yaml = _create_yaml_file(*new_data)
             _mutacc_extract_and_import(configfile, case_id, padding, case_yaml)
 
