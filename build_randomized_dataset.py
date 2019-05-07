@@ -7,7 +7,7 @@ import pymongo as mongo
 import mutacc_handler as muth
 
 
-# TODO: ADD IN REFERENCE DATA TO THE SYNTHEZISED BAM AND FASTQ FILES
+# TODO: ADD IN REFERENCE DATA TO THE SYNTHESISED BAM AND FASTQ FILES
 
 def create_randomized_dataset(case_db_configfile, synth_db_configfile, background_bam, background_fastq1,
                               background_fastq2):
