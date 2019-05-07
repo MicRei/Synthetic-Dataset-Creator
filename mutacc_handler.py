@@ -47,7 +47,6 @@ def import_to_database(case_id, configfile, padding, *args):
 
         else:
             raise MutaccError("Not enough args sent to import or no such file exists. Please supplement your data")
-
     except Exception as e:
         print("Something went wrong during import: ", e)
 
@@ -114,7 +113,6 @@ def remove_from_database(case, configfile):
     :return:            None.
     """
     sp.run(['mutacc', '--config-file', configfile, 'db', 'remove', case])
-    print("DONE")
 
 
 def _create_yaml_file(case_id, sample_id, sex, mother, father, bam, analysis, phenotype, variants):
@@ -136,8 +134,6 @@ def _create_yaml_file(case_id, sample_id, sex, mother, father, bam, analysis, ph
         create_file = case_id + ".yaml"
     else:
         create_file = str(case_id) + ".yaml"
-
-    print("Created file: " + create_file)
 
     with open(create_file, 'w') as yamlfile:
         try:

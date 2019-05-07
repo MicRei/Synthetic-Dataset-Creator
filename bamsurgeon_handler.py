@@ -25,8 +25,13 @@ def create_mutations(mutationtype, variationfile, referencefile, bamfile, output
         :return:                None.
         """
 
-    sp.run(
-        [mutationtype + '.py', '-v', variationfile, '-r', referencefile, '-f', bamfile, '-o', outputfile,
-         '-p', str(nr_procs), '--maxdepth', '10000'])
+    sp.run([mutationtype + '.py',
+            '-v', variationfile,
+            '-r', referencefile,
+            '-f', bamfile,
+            '-o', outputfile,
+            '-p', str(nr_procs),
+            '--maxdepth', '10000'])
+
     sp.run(['samtools', 'sort', '-@', str(nr_procs), '-o', outputfile, outputfile])
     sp.run(['samtools', 'index', '-@', str(nr_procs), outputfile])
