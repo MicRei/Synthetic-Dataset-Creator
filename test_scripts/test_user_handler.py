@@ -1,5 +1,5 @@
 import unittest
-import user_handler as userh
+from Synthetic_Dataset_Creator import user_handler as userh
 
 
 # FIXME: User mutacc and bamsurgeon tests to test the program instead of writing your own.

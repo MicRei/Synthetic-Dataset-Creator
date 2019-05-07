@@ -4,7 +4,7 @@ Module to randomize datasets through mutacc
 import subprocess as sp
 import re
 import pymongo as mongo
-import mutacc_handler as muth
+from Synthetic_Dataset_Creator import mutacc_handler as muth
 import random
 
 

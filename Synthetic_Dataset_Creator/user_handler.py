@@ -2,8 +2,7 @@
 File to handle user interactions.
 """
 
-import mutacc_handler as mach
-import bamsurgeon_handler as bamh
+from Synthetic_Dataset_Creator import bamsurgeon_handler as bamh, mutacc_handler as mach
 
 
 class UserError(Exception):

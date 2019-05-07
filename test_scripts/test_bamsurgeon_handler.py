@@ -1,5 +1,5 @@
 import unittest
-import bamsurgeon_handler as bams
+from Synthetic_Dataset_Creator import bamsurgeon_handler as bams
 
 
 class MyTestCase(unittest.TestCase):
