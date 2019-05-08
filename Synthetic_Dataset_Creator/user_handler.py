@@ -138,8 +138,10 @@ def create_dataset(configfile, background_bam, background_fastq1, background_fas
     mach.export_from_database(configfile, background_bam, background_fastq1, background_fastq2, member, args)
 
 
-def build_synthetic_dataset():
-    build_dataset.create_randomized_dataset()
+def build_synthetic_dataset(mutaccdb_config, syntheticdb_config, background_bam, background_fastq1, background_fastq2,
+                            reference_data_fq1, reference_data_fq2):
+    build_dataset.create_randomized_dataset(mutaccdb_config, syntheticdb_config, background_bam, background_fastq1,
+                                            background_fastq2, reference_data_fq1, reference_data_fq2)
 
 # TODO:
 #       Allow calling of any function in this file.
