@@ -7,6 +7,7 @@ import pymongo as mongo
 from Synthetic_Dataset_Creator import mutacc_handler as muth
 import random
 from os import listdir
+from yaml import safe_load
 
 
 def create_randomized_dataset(case_db_configfile, synth_db_configfile, background_bam, background_fastq1,
@@ -117,7 +118,7 @@ def _get_root_dir_path(case_db_configfile):
     :return:
     """
     with open(case_db_configfile, 'r') as config_handle:
-        root_dir = re.search("root_dir", config_handle.read()).string.split(" ")[1].strip("\n")
+        root_dir = safe_load(config_handle).get('root_dir')
     return root_dir
 
 

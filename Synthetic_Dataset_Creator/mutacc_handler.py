@@ -86,14 +86,17 @@ def export_from_database(configfile, background_bam, background_fastq1, backgrou
     """
     root_dir = _get_mutacc_root_dir(configfile)
 
+    print(root_dir)
+
     path_to_query = root_dir + 'queries/affected_query.mutacc'
 
-    if case is None:
-        case = '{}'
-    sp.run(['mutacc', '--config-file', configfile, 'db', 'export', '-m', member, '-c', case])
-    sp.run(
-        ['mutacc', '--config-file', configfile, 'synthesize', '-b', background_bam, '-f', background_fastq1,
-         '-f2', background_fastq2, '-q', path_to_query])
+    print(path_to_query)
+    # if case is None:
+    #     case = '{}'
+    # sp.run(['mutacc', '--config-file', configfile, 'db', 'export', '-m', member, '-c', case])
+    # sp.run(
+    #     ['mutacc', '--config-file', configfile, 'synthesize', '-b', background_bam, '-f', background_fastq1,
+    #      '-f2', background_fastq2, '-q', path_to_query])
 
 
 def remove_from_database(case, configfile):
@@ -144,5 +147,5 @@ def _create_yaml_file(case_id, sample_id, sex, mother, father, bam, analysis, ph
 
 def _get_mutacc_root_dir(configfile):
     with open(configfile, 'r') as config_handle:
-        root_dir = search("root_dir", config_handle.read()).string.split(" ")[1].strip("\n")
+        root_dir = yaml.safe_load(config_handle).get('root_dir')
     return root_dir
