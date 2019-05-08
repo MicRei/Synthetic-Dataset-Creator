@@ -8,8 +8,9 @@ from Synthetic_Dataset_Creator import mutacc_handler as muth
 import random
 from os import listdir
 
+
 def create_randomized_dataset(case_db_configfile, synth_db_configfile, background_bam, background_fastq1,
-                              background_fastq2, reference_data_fq1=[], reference_data_fq2=[]):
+                              background_fastq2, reference_data_fq1=None, reference_data_fq2=None):
     """
     Create a new database to load with random variants to use in a dataset.
     :param case_db_configfile:  Configfile with path to root directory of mutacc.
@@ -25,6 +26,10 @@ def create_randomized_dataset(case_db_configfile, synth_db_configfile, backgroun
     mutacc_import = ['mutacc', '--config-file', synth_db_configfile, 'db', 'import']
     caselist = []
     caselist.extend(case_id_list)
+
+    if reference_data_fq1 is None:
+        reference_data_fq1 = []
+        reference_data_fq2 = []
 
     if len(reference_data_fq1) != 0 and len(reference_data_fq2) != 0 \
             and len(reference_data_fq1) == len(reference_data_fq2):
@@ -51,7 +56,8 @@ def create_randomized_dataset(case_db_configfile, synth_db_configfile, backgroun
     else:
         chosen_references = {}
 
-    # TODO: Exclude overlapping fastq data, if present
+    # TODO: Exclude overlapping fastq data, if present, when merging reference data and synthetic fq's
+    # TODO:
 
     root_dir = get_root_dir_path(synth_db_configfile)
     path_to_synthetic_datasets = root_dir + 'datasets/'
@@ -60,8 +66,6 @@ def create_randomized_dataset(case_db_configfile, synth_db_configfile, backgroun
         for fq_file in range(len(chosen_references)):
             sp.run(['cat', synthetic_fqs[0], chosen_references[fq_file]])
             sp.run(['cat', synthetic_fqs[1], chosen_references_pair[fq_file]])
-
-
 
 
 def create_synthesized_dataset_from_database(background_bam, background_fastq1, background_fastq2, caselist,
