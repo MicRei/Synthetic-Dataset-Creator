@@ -13,6 +13,7 @@ def create_randomized_dataset(case_db_configfile, synth_db_configfile, backgroun
                               background_fastq2, reference_data_fq1=None, reference_data_fq2=None):
     """
     Create a new database to load with random variants to use in a dataset.
+
     :param case_db_configfile:  Configfile with path to root directory of mutacc.
     :param synth_db_configfile: Configfile with path to root directory of mutacc and name of database for synthesizing.
     :param background_bam:      BAM to use as background for dataset.
@@ -23,7 +24,6 @@ def create_randomized_dataset(case_db_configfile, synth_db_configfile, backgroun
     :return: None, synthesizes a dataset
     """
     case_id_list = _extract_case_ids(case_db_configfile)
-    mutacc_import = ['mutacc', '--config-file', synth_db_configfile, 'db', 'import']
     caselist = []
     caselist.extend(case_id_list)
 
@@ -44,7 +44,7 @@ def create_randomized_dataset(case_db_configfile, synth_db_configfile, backgroun
         randomized_list = random.sample(caselist, int(len(caselist) * 0.67))
 
     _create_synthesized_dataset_from_database(background_bam, background_fastq1, background_fastq2, caselist,
-                                              mutacc_import, case_db_configfile, randomized_list, synth_db_configfile)
+                                              case_db_configfile, randomized_list, synth_db_configfile)
 
     chosen_references = []
     chosen_references_pair = []
@@ -69,7 +69,18 @@ def create_randomized_dataset(case_db_configfile, synth_db_configfile, backgroun
 
 
 def _create_synthesized_dataset_from_database(background_bam, background_fastq1, background_fastq2, caselist,
-                                              mutacc_import, case_db_configfile, randomized_list, synth_db_configfile):
+                                              case_db_configfile, randomized_list, synth_db_configfile):
+    """
+    :param background_bam:      BAM to use as background for dataset.
+    :param background_fastq1:   First FastQ to use as background for dataset
+    :param background_fastq2:   Second FastQ to use as background for dataset, pair-ended analysis.
+    :param caselist:            List if cases from mutacc database to include in dataset.
+    :param case_db_configfile:  Configfile with path to root directory of mutacc.
+    :param randomized_list:     List with randomized cases and data to create a dataset from.
+    :param synth_db_configfile: Configfile with path to root directory of mutacc and name of database for synthesizing.
+    :return:
+    """
+    mutacc_import = ['mutacc', '--config-file', synth_db_configfile, 'db', 'import']
     root_dir = _get_root_dir_path(case_db_configfile)
     path_to_import_dir = root_dir + 'imports/'
 
@@ -88,6 +99,12 @@ def _create_synthesized_dataset_from_database(background_bam, background_fastq1,
 
 
 def _pair_reference_fastq_files(reference_data_fq1, reference_data_fq2):
+    """
+    Pairs FQ files with each other. Makes a dictionary with names in FastQ1 file as keys and FastQ2 file as values.
+    :param reference_data_fq1:
+    :param reference_data_fq2:
+    :return:
+    """
     paired_reference_data = {}
     for fq_pairs in range(len(reference_data_fq1)):
         paired_reference_data[reference_data_fq1[fq_pairs]] = reference_data_fq2[fq_pairs]
@@ -95,12 +112,20 @@ def _pair_reference_fastq_files(reference_data_fq1, reference_data_fq2):
 
 
 def _get_root_dir_path(case_db_configfile):
+    """
+    :param case_db_configfile:  Extracts the root directory from a configfile
+    :return:
+    """
     with open(case_db_configfile, 'r') as config_handle:
         root_dir = re.search("root_dir", config_handle.read()).string.split(" ")[1].strip("\n")
     return root_dir
 
 
 def _extract_case_ids(case_db_configfile):
+    """
+    :param case_db_configfile: Configfile containing the path to root-dir for mutacc mongo database.
+    :return:
+    """
     mutacc_view = ['mutacc', '--config-file', case_db_configfile, 'db', 'view', '-c', '{}']
     cases = re.findall("case_id.*[0-9a-zA-z]", sp.run(mutacc_view, stdout=sp.PIPE).stdout.decode('UTF-8'))
     case_id_list = []

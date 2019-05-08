@@ -8,7 +8,7 @@ import subprocess as sp
 # TODO: Parse args in case of more arguments. REMEMBER: addsv does not handle picard.
 def create_mutations(mutationtype, variationfile, referencefile, bamfile, outputfile, nr_procs):  # *args
     """
-        Create mutation based on userinput in bamfile data based on positions given in variationfile and print
+        Create mutation based on user input in bamfile data based on positions given in variationfile and print
          them to outputfile.
 
         :param mutationtype:    mutation type to perform: addsnv, addsv, or addindel;
