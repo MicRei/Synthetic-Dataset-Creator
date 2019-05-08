@@ -22,7 +22,7 @@ def create_randomized_dataset(case_db_configfile, synth_db_configfile, backgroun
     :param reference_data_fq2:  Reference data to add to the sampling pool. Complementary list to reference_Data_fq1.
     :return: None, synthesizes a dataset
     """
-    case_id_list = extract_case_ids(case_db_configfile)
+    case_id_list = _extract_case_ids(case_db_configfile)
     mutacc_import = ['mutacc', '--config-file', synth_db_configfile, 'db', 'import']
     caselist = []
     caselist.extend(case_id_list)
@@ -33,7 +33,7 @@ def create_randomized_dataset(case_db_configfile, synth_db_configfile, backgroun
 
     if len(reference_data_fq1) != 0 and len(reference_data_fq2) != 0 \
             and len(reference_data_fq1) == len(reference_data_fq2):
-        dict_of_referencedata = pair_reference_fastq_files(reference_data_fq1, reference_data_fq2)
+        dict_of_referencedata = _pair_reference_fastq_files(reference_data_fq1, reference_data_fq2)
         caselist.extend(reference_data_fq1)
     else:
         dict_of_referencedata = {}
@@ -43,8 +43,8 @@ def create_randomized_dataset(case_db_configfile, synth_db_configfile, backgroun
     else:
         randomized_list = random.sample(caselist, int(len(caselist) * 0.67))
 
-    create_synthesized_dataset_from_database(background_bam, background_fastq1, background_fastq2, caselist,
-                                             mutacc_import, case_db_configfile, randomized_list, synth_db_configfile)
+    _create_synthesized_dataset_from_database(background_bam, background_fastq1, background_fastq2, caselist,
+                                              mutacc_import, case_db_configfile, randomized_list, synth_db_configfile)
 
     chosen_references = []
     chosen_references_pair = []
@@ -56,10 +56,10 @@ def create_randomized_dataset(case_db_configfile, synth_db_configfile, backgroun
     else:
         chosen_references = {}
 
-    # TODO: Exclude overlapping fastq data, if present, when merging reference data and synthetic fq's
-    # TODO:
+    # TODO: Exclude overlapping fastq data, if present, when merging reference data and synthetic fq's.
+    # TODO: Or just use reference data as a dataset? Or use reference data as background?
 
-    root_dir = get_root_dir_path(synth_db_configfile)
+    root_dir = _get_root_dir_path(synth_db_configfile)
     path_to_synthetic_datasets = root_dir + 'datasets/'
     synthetic_fqs = listdir(path_to_synthetic_datasets)
     if len(chosen_references) > 0:
@@ -68,9 +68,9 @@ def create_randomized_dataset(case_db_configfile, synth_db_configfile, backgroun
             sp.run(['cat', synthetic_fqs[1], chosen_references_pair[fq_file]])
 
 
-def create_synthesized_dataset_from_database(background_bam, background_fastq1, background_fastq2, caselist,
-                                             mutacc_import, case_db_configfile, randomized_list, synth_db_configfile):
-    root_dir = get_root_dir_path(case_db_configfile)
+def _create_synthesized_dataset_from_database(background_bam, background_fastq1, background_fastq2, caselist,
+                                              mutacc_import, case_db_configfile, randomized_list, synth_db_configfile):
+    root_dir = _get_root_dir_path(case_db_configfile)
     path_to_import_dir = root_dir + 'imports/'
 
     for case in randomized_list:
@@ -87,20 +87,20 @@ def create_synthesized_dataset_from_database(background_bam, background_fastq1, 
         synthesizer_database.close()
 
 
-def pair_reference_fastq_files(reference_data_fq1, reference_data_fq2):
+def _pair_reference_fastq_files(reference_data_fq1, reference_data_fq2):
     paired_reference_data = {}
     for fq_pairs in range(len(reference_data_fq1)):
         paired_reference_data[reference_data_fq1[fq_pairs]] = reference_data_fq2[fq_pairs]
     return paired_reference_data
 
 
-def get_root_dir_path(case_db_configfile):
+def _get_root_dir_path(case_db_configfile):
     with open(case_db_configfile, 'r') as config_handle:
         root_dir = re.search("root_dir", config_handle.read()).string.split(" ")[1].strip("\n")
     return root_dir
 
 
-def extract_case_ids(case_db_configfile):
+def _extract_case_ids(case_db_configfile):
     mutacc_view = ['mutacc', '--config-file', case_db_configfile, 'db', 'view', '-c', '{}']
     cases = re.findall("case_id.*[0-9a-zA-z]", sp.run(mutacc_view, stdout=sp.PIPE).stdout.decode('UTF-8'))
     case_id_list = []

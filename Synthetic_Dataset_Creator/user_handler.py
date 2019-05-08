@@ -2,7 +2,9 @@
 File to handle user interactions.
 """
 
-from Synthetic_Dataset_Creator import bamsurgeon_handler as bamh, mutacc_handler as mach
+from Synthetic_Dataset_Creator import bamsurgeon_handler as bamh
+from Synthetic_Dataset_Creator import mutacc_handler as mach
+from Synthetic_Dataset_Creator import build_randomized_dataset as build_dataset
 
 
 class UserError(Exception):
@@ -135,6 +137,9 @@ def create_dataset(configfile, background_bam, background_fastq1, background_fas
     """
     mach.export_from_database(configfile, background_bam, background_fastq1, background_fastq2, member, args)
 
+
+def build_synthetic_dataset():
+    build_dataset.create_randomized_dataset()
 
 # TODO:
 #       Allow calling of any function in this file.
