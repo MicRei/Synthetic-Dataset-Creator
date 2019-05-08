@@ -3,8 +3,6 @@ import Synthetic_Dataset_Creator.build_randomized_dataset as build_dataset
 
 
 class MyTestCase(unittest.TestCase):
-    # def test_something(self):
-    #     self.assertEqual(True, False)
 
     def test_get_root_dir(self):
         self.assertEqual(
@@ -17,8 +15,10 @@ class MyTestCase(unittest.TestCase):
             '/home/mire/PycharmProjects/project_test/mutacc_config_files/mutacc_config.yaml')
         print(caselist)
         self.assertIsNotNone(caselist)
+        self.assertTrue('hannahmontana' in caselist)
 
     def test_pair_reference_fastq_files(self):
+        self.assertTrue(False)
 
 
 if __name__ == '__main__':
