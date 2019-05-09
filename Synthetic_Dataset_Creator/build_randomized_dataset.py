@@ -24,9 +24,10 @@ def create_randomized_dataset(case_db_configfile, synth_db_configfile, backgroun
     :param reference_data_fq2:  Reference data to add to the sampling pool. Complementary list to reference_Data_fq1.
     :return: None, synthesizes a dataset
     """
-    case_id_list = _extract_case_ids(case_db_configfile)
-    caselist = []
-    caselist.extend(case_id_list)
+    caselist = _extract_case_ids(case_db_configfile)
+    # case_id_list = _extract_case_ids(case_db_configfile)
+    # caselist = []
+    # caselist.extend(case_id_list)
 
     if reference_data_fq1 is None:
         reference_data_fq1 = []
@@ -91,7 +92,6 @@ def _create_synthesized_dataset_from_database(background_bam, background_fastq1,
             mutacc_import.pop()
     muth.export_from_database(synth_db_configfile, background_bam, background_fastq1, background_fastq2)
     with open(synth_db_configfile, 'r') as synth_db_handle:
-
         servername = re.search("database.*", synth_db_handle.read()).group().split(": ")[1]
         synthesizer_database = mongo.MongoClient()
         synthesizer_database.drop_database(servername)

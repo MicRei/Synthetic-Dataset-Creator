@@ -91,12 +91,12 @@ def export_from_database(configfile, background_bam, background_fastq1, backgrou
     path_to_query = root_dir + 'queries/affected_query.mutacc'
 
     print(path_to_query)
-    # if case is None:
-    #     case = '{}'
-    # sp.run(['mutacc', '--config-file', configfile, 'db', 'export', '-m', member, '-c', case])
-    # sp.run(
-    #     ['mutacc', '--config-file', configfile, 'synthesize', '-b', background_bam, '-f', background_fastq1,
-    #      '-f2', background_fastq2, '-q', path_to_query])
+    if case is None:
+        case = '{}'
+    sp.run(['mutacc', '--config-file', configfile, 'db', 'export', '-m', member, '-c', case])
+    sp.run(
+        ['mutacc', '--config-file', configfile, 'synthesize', '-b', background_bam, '-f', background_fastq1,
+         '-f2', background_fastq2, '-q', path_to_query])
 
 
 def remove_from_database(case, configfile):
