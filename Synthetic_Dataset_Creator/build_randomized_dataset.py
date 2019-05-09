@@ -32,8 +32,7 @@ def create_randomized_dataset(case_db_configfile, synth_db_configfile, backgroun
         reference_data_fq1 = []
         reference_data_fq2 = []
 
-    if len(reference_data_fq1) != 0 and len(reference_data_fq2) != 0 \
-            and len(reference_data_fq1) == len(reference_data_fq2):
+    if len(reference_data_fq1) != 0 and len(reference_data_fq1) == len(reference_data_fq2):
         dict_of_referencedata = _pair_reference_fastq_files(reference_data_fq1, reference_data_fq2)
         caselist.extend(reference_data_fq1)
     else:
