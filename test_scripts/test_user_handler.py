@@ -2,6 +2,8 @@ import unittest
 from Synthetic_Dataset_Creator import user_handler as userh
 
 
+test_path = '/home/mire/PycharmProjects/project_test/testfiles/'
+
 # FIXME: User mutacc and bamsurgeon tests to test the program instead of writing your own.
 #       Why reinvent the wheel, right?
 class MyTestCase(unittest.TestCase):

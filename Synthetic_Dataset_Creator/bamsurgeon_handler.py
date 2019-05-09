@@ -3,7 +3,7 @@ File to handle bamsurgeon interaction.
 """
 
 import subprocess as sp
-
+from pathlib import Path
 
 # TODO: Parse args in case of more arguments. REMEMBER: addsv does not handle picard.
 def create_mutations(mutationtype, variationfile, referencefile, bamfile, outputfile, nr_procs):  # *args
@@ -33,5 +33,6 @@ def create_mutations(mutationtype, variationfile, referencefile, bamfile, output
             '-p', str(nr_procs),
             '--maxdepth', '10000'])
 
-    sp.run(['samtools', 'sort', '-@', str(nr_procs), '-o', outputfile, outputfile])
-    sp.run(['samtools', 'index', '-@', str(nr_procs), outputfile])
+    if Path(outputfile).is_file() is True:
+        sp.run(['samtools', 'sort', '-@', str(nr_procs), '-o', outputfile, outputfile])
+        sp.run(['samtools', 'index', '-@', str(nr_procs), outputfile])
