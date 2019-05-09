@@ -46,11 +46,18 @@ class MyTestCase(unittest.TestCase):
                                                                 caselist,
                                                                 case_db_configfile, randomized_list,
                                                                 synth_db_configfile)
-        # build_dataset._create_synthesized_dataset_from_database(background_bam, background_fastq1, background_fastq2,
-        #                                                         caselist,
-        #                                                         case_db_configfile, caselist,
-        #                                                         synth_db_configfile)
-        # self.assertNotEqual(caselist, randomized_list)
+
+    def test_create_randomized_dataset(self):
+        background_bam = '/home/mire/PycharmProjects/project_files/NA12878_mybam.sorted.bam'
+        background_fastq1 = '/home/mire/PycharmProjects/project_test/mutacc_tests/reads/57742/sample32/mutacc_NA12878_mybam_R1.fastq.gz'
+        background_fastq2 = '/home/mire/PycharmProjects/project_test/mutacc_tests/reads/57742/sample32/mutacc_NA12878_mybam_R2.fastq.gz'
+        caselist = build_dataset._extract_case_ids(
+            '/home/mire/PycharmProjects/project_test/mutacc_config_files/mutacc_config.yaml')
+        case_db_configfile = '/home/mire/PycharmProjects/project_test/mutacc_config_files/mutacc_config.yaml'
+        synth_db_configfile = '/home/mire/PycharmProjects/project_test/mutacc_config_files/mutacc_synthDB_config.yaml'
+
+        build_dataset.create_randomized_dataset(case_db_configfile, synth_db_configfile, background_bam,
+                                                background_fastq1, background_fastq2)
 
 
 if __name__ == '__main__':
