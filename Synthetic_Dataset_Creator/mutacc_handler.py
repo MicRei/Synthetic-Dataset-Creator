@@ -3,7 +3,6 @@ File to handle mutacc interaction.
 """
 import yaml
 import subprocess as sp
-from re import search
 from pathlib import Path
 
 
