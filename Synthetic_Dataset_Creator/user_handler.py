@@ -143,7 +143,8 @@ def build_synthetic_dataset(mutaccdb_config, syntheticdb_config, background_bam,
     build_dataset.create_randomized_dataset(mutaccdb_config, syntheticdb_config, background_bam, background_fastq1,
                                             background_fastq2, reference_data_fq1, reference_data_fq2)
 
+
 # TODO:
 #       Allow calling of any function in this file.
-# if __name__ == '__main__':
-#     print("Hello there SAILOR!")
+if __name__ == '__main__':
+    print("Hello there SAILOR!")
