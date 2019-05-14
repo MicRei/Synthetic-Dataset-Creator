@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 """
 File to handle user interactions.
 """
@@ -5,6 +7,7 @@ from program_handlers import build_randomized_dataset as build_dataset
 from program_handlers import mutacc_handler as mach
 from program_handlers import bamsurgeon_handler as bamh
 import sys
+import pathlib as path
 
 
 class UserError(Exception):
@@ -30,15 +33,50 @@ def main(args):
               "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n")
     else:
         try:
+            # Check each argument and assure that
+            # they correspond with the arguments sent to create_mutations_in_bamfile
             if args[1] == 'create_mutations':
                 if 6 <= len(args) < 9:
-                    print(args[2 - len(args)])
                     print('\x1b[33m' + 'MUTANTS ARISE!' + '\x1b[0m')
+                    if args[2] in {'addsnv', 'addsv', 'addindel'}:
+                        file_checker = [path.Path(arg).is_file() for arg in args[3:6]]
+                        suffixes = [path.Path(arg).suffix for arg in args[3:6]]
+                        if False not in file_checker:
+                            # TODO: check that each file is a BED, fa, and BAM, respectively
+                            if (suffixes[0] == '.bed' and
+                                    suffixes[1] == '.fa' and
+                                    suffixes[2] == '.bam'):
+                                create_mutation_arguments = []
+                                create_mutation_arguments.extend(args[2:6])
+                                if len(args) > 6:
+                                    if path.Path(args[6]).suffix == '.bam':
+                                        create_mutation_arguments.append(args[6])
+                                    else:
+                                        raise UserError('\x1b[31m'
+                                                        + "Please see over your arguments as the "
+                                                          "outputfile was not a .bam file"
+                                                        + '\x1b[0m')
+                                if len(args) > 7:
+                                    if args[7].isdigit():
+                                        create_mutation_arguments.append(args[7])
+                                    else:
+                                        raise UserError('\x1b[31m'
+                                                        + "Please see over your arguments as the "
+                                                          "number of processes sent in was not a number"
+                                                        + '\x1b[0m')
+                                print(create_mutation_arguments)
+                                create_mutations_in_bamfile(*create_mutation_arguments)
+
+                        else:
+                            raise UserError('\x1b[31m'
+                                            + "Please see over your arguments as one or more was not a file."
+                                            + '\x1b[0m')
+
                 else:
                     print(len(args))
                     raise UserError('\x1b[33m' + "Number of arguments for create_mutations are incorrect.\n"
                                                  "Should be 4(four) to 6(six) arguments:\n" + '\x1b[0m'
-                                    + '\x1b[1;34m' + "mutationtype\n"
+                                    + '\x1b[1;34m' + "mutationtype: addsnv, addsv, or addindel are accepted.\n"
                                                      "variationfile\n"
                                                      "referencefile\n"
                                                      "bamfile\n"
@@ -63,7 +101,11 @@ def main(args):
 
             elif args[1] == 'import':
                 if 5 <= len(args) < 14:
+                    print(len(args))
+                    print(args)
                     print('\x1b[33m' + "Scotty beaming you up!" + '\x1b[0m')
+                    if len(args) == 5:
+                        print('hello')
                 else:
                     raise UserError('\x1b[33m' + "Number of arguments for import are incorrect.\n"
                                                  "Should be 3(three) to 13(thirteen) arguments:\n" + '\x1b[0m'
@@ -131,7 +173,8 @@ def main(args):
                                   " and from reference data\n"
                                 + '\x1b[0m')
         except Exception as e:
-            print('\x1b[37m' + "Arguments are faulty or incorrect" + '\x1b[0m', end=':\n')
+            print("\n**************************************************************\n"
+                  "Arguments are faulty or incorrect:")
             print(e)
 
 
@@ -153,10 +196,10 @@ def create_mutations_in_bamfile(mutationtype, variationfile, referencefile, bamf
         if outputfile is None:
             outputfile = bamfile
 
-        if type(nr_procs) != int:
-            raise UserError("Please use a number to specify the number of threads and not words")
-        else:
-            bamh.create_mutations(mutationtype, variationfile, referencefile, bamfile, outputfile, nr_procs)
+        # if type(nr_procs) != int:
+        #     raise UserError("Please use a number to specify the number of threads and not words")
+        # else:
+        bamh.create_mutations(mutationtype, variationfile, referencefile, bamfile, outputfile, nr_procs)
     except UserError as e:
         print('An error occurred with the parameters for BAMSurgeon: ', e)
 
