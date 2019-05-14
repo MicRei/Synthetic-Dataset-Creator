@@ -1,6 +1,6 @@
 import unittest
 from pathlib import Path
-from Synthetic_Dataset_Creator import mutacc_handler
+from program_handlers import mutacc_handler
 
 
 class TestMutaccHandler(unittest.TestCase):

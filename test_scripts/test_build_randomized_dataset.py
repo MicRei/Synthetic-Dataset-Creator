@@ -1,5 +1,5 @@
 import unittest
-import Synthetic_Dataset_Creator.build_randomized_dataset as build_dataset
+import program_handlers.build_randomized_dataset as build_dataset
 import random
 
 

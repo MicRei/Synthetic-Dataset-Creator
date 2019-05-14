@@ -1,5 +1,5 @@
 import unittest
-from Synthetic_Dataset_Creator import bamsurgeon_handler as bams
+from program_handlers import bamsurgeon_handler as bams
 import os
 
 
