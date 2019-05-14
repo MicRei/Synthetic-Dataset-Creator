@@ -11,110 +11,128 @@ class UserError(Exception):
     pass
 
 
-def main():
-    try:
-        if sys.argv[1] == 'create_mutations':
-            if 6 <= len(sys.argv) < 9:
-                print(sys.argv[2 - len(sys.argv)])
-                print('\x1b[33m' + 'MUTANTS ARISE!' + '\x1b[0m')
-            else:
-                raise UserError('\x1b[33m' + "Number of arguments for create_mutations are incorrect.\n"
-                                             "Should be 4(four) to 6(six) arguments:\n" + '\x1b[0m'
-                                + '\x1b[1;34m' + "mutationtype\n"
-                                                 "variationfile\n"
-                                                 "referencefile\n"
-                                                 "bamfile\n"
-                                                 "(OPTIONAL) outputfile; default is None\n"
-                                                 "(OPTIONAL) number of processes; default is 1(one)" + '\x1b[0m')
+def main(args):
+    if len(args) == 1:
+        print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"
+              "Welcome to Synthetic Dataset Creator.\n"
+              "Usage:\n"
+              "\t create_mutations: Mutate a BAM file at the regions specified in a BED file.\n"
+              "\t import: Import a new case into the mutacc database. Case can be either:\n"
+              "\t\t -- new case data entered here.\n"
+              "\t\t -- A case YAML file in the specified layout of mutacc.\n"
+              "\t remove: Remove a case from the mutacc database using the case_id it is registered under.\n"
+              "\t create_dataset: Create a dataset from all the cases in mutacc database or from the fetched cases\n"
+              "\t\t\t Cases can be fetched by a JSON string of valid MongoDB language.\n"
+              "\t build_synthetics: Randomly choose cases in the mutacc database and referencedata, and build\n"
+              "\t\t\t  a new dataset from them.\n"
+              "\t mass_mutate: NOT IMPLEMENTED YET. Mutate several BAM files at the regions specified in "
+              "\t\t\t their specific BED file and import them to the mutacc database.\n"
+              "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n")
+    else:
+        try:
+            if args[1] == 'create_mutations':
+                if 6 <= len(args) < 9:
+                    print(args[2 - len(args)])
+                    print('\x1b[33m' + 'MUTANTS ARISE!' + '\x1b[0m')
+                else:
+                    print(len(args))
+                    raise UserError('\x1b[33m' + "Number of arguments for create_mutations are incorrect.\n"
+                                                 "Should be 4(four) to 6(six) arguments:\n" + '\x1b[0m'
+                                    + '\x1b[1;34m' + "mutationtype\n"
+                                                     "variationfile\n"
+                                                     "referencefile\n"
+                                                     "bamfile\n"
+                                                     "(OPTIONAL) outputfile; default is None\n"
+                                                     "(OPTIONAL) number of processes; default is 1(one)" + '\x1b[0m')
 
-        elif sys.argv[1] == 'mass_mutate':
-            if 9 <= len(sys.argv) < 13:
-                print('\x1b[33m' + "MORE MUTANTS THAN THE WORLD CAN HANDLE!!! MOAHAHAHA!" + '\x1b[0m')
-            else:
-                raise UserError('\x1b[33m' + "Number of arguments for mass_mutate are incorrect.\n"
-                                             "Should be 7(seven) to 12(twelve) arguments:\n" + '\x1b[0m'
-                                + '\x1b[1;34m' + "mutationtype\n"
-                                                 "configfile\n"
-                                                 "padding\n"
-                                                 "list of variationfiles\n"
-                                                 "list of referencefiles\n"
-                                                 "list of bamfiles\n"
-                                                 "list of case_ids for each bamfile imported to the database\n"
-                                                 "(OPTIONAL) list if outputfiles; default is None\n"
-                                                 "(OPTIONAL) number of processes; default is 1(one)" + '\x1b[0m')
+            elif args[1] == 'mass_mutate':
+                if 9 <= len(args) < 13:
+                    print('\x1b[33m' + "MORE MUTANTS THAN THE WORLD CAN HANDLE!!! MOAHAHAHA!" + '\x1b[0m')
+                else:
+                    raise UserError('\x1b[33m' + "Number of arguments for mass_mutate are incorrect.\n"
+                                                 "Should be 7(seven) to 12(twelve) arguments:\n" + '\x1b[0m'
+                                    + '\x1b[1;34m' + "mutationtype\n"
+                                                     "configfile\n"
+                                                     "padding\n"
+                                                     "list of variationfiles\n"
+                                                     "list of referencefiles\n"
+                                                     "list of bamfiles\n"
+                                                     "list of case_ids for each bamfile imported to the database\n"
+                                                     "(OPTIONAL) list if outputfiles; default is None\n"
+                                                     "(OPTIONAL) number of processes; default is 1(one)" + '\x1b[0m')
 
-        elif sys.argv[1] == 'import':
-            if 5 <= len(sys.argv) < 14:
-                print('\x1b[33m' + "Scotty beaming you up!" + '\x1b[0m')
-            else:
-                raise UserError('\x1b[33m' + "Number of arguments for import are incorrect.\n"
-                                             "Should be 3(three) to 13(thirteen) arguments:\n" + '\x1b[0m'
-                                + '\x1b[1;34m' + "case_id\n"
-                                                 "configfile\n"
-                                                 "padding\n"
-                                                 "(OPTIONAL) Sample ID\n"
-                                                 "(OPTIONAL) Gender of sample\n"
-                                                 "(OPTIONAL) Sample ID of mother, 0 if none exists\n"
-                                                 "(OPTIONAL) Sample ID of father, 0 if none exists\n"
-                                                 "(OPTIONAL) Path to BAM file for sample\n"
-                                                 "(OPTIONAL) Analysis type of sample (wgs, exon, etc.)\n"
-                                                 "(OPTIONAL) Phenotype of the sample (Usually affected)\n"
-                                                 "(OPTIONAL) Path to VCF file" + '\x1b[0m')
+            elif args[1] == 'import':
+                if 5 <= len(args) < 14:
+                    print('\x1b[33m' + "Scotty beaming you up!" + '\x1b[0m')
+                else:
+                    raise UserError('\x1b[33m' + "Number of arguments for import are incorrect.\n"
+                                                 "Should be 3(three) to 13(thirteen) arguments:\n" + '\x1b[0m'
+                                    + '\x1b[1;34m' + "case_id\n"
+                                                     "configfile\n"
+                                                     "padding\n"
+                                                     "(OPTIONAL) Sample ID\n"
+                                                     "(OPTIONAL) Gender of sample\n"
+                                                     "(OPTIONAL) Sample ID of mother, 0 if none exists\n"
+                                                     "(OPTIONAL) Sample ID of father, 0 if none exists\n"
+                                                     "(OPTIONAL) Path to BAM file for sample\n"
+                                                     "(OPTIONAL) Analysis type of sample (wgs, exon, etc.)\n"
+                                                     "(OPTIONAL) Phenotype of the sample (Usually affected)\n"
+                                                     "(OPTIONAL) Path to VCF file" + '\x1b[0m')
 
-        elif sys.argv[1] == 'remove':
-            if 4 <= len(sys.argv) < 5:
-                print('\x1b[33m' + "Death befalls us all . . ." + '\x1b[0m')
+            elif args[1] == 'remove':
+                if 4 <= len(args) < 5:
+                    print('\x1b[33m' + "Death befalls us all . . ." + '\x1b[0m')
+                else:
+                    raise UserError('\x1b[33m' + "Number of arguments for remove are incorrect.\n"
+                                                 "Should be 2(two) arguments:\n" + '\x1b[0m'
+                                    + '\x1b[1;34m' + "case_id recorded in database\n"
+                                                     "configfile for mutacc"
+                                    + '\x1b[0m')
+
+            elif args[1] == 'create_dataset':
+                if 8 <= len(args) < 11:
+                    print(
+                        '\x1b[33m' + "BEEP BEEEP BEEP . . .Sorry, robot in my throat. Creating your datasets." + '\x1b[0m')
+                else:
+                    raise UserError('\x1b[33m' + "Number of arguments for create_dataset are incorrect.\n"
+                                                 "Should be 4(four) to 6(six) arguments:\n" + '\x1b[0m'
+                                    + '\x1b[1;34m' + "mutacc configfile\n"
+                                                     "BAM file to be used as a background for the dataset\n"
+                                                     "FastQ file to be used as a background for the dataset\n"
+                                                     "Pair of first FastQ file for pair ended background for dataset\n"
+                                                     "(OPTIONAL) Status of samples to use; default is affected cases\n"
+                                                     "(OPTIONAL) specific case search term,"
+                                                     " see mutacc API for more information; defaults to None" + '\x1b[0m')
+
+            elif args[1] == 'build_synthetics':
+                if 9 <= len(args) < 12:
+                    print('\x1b[33m' + "The synths are here . . .  RUN!" + '\x1b[0m')
+                else:
+                    raise UserError('\x1b[33m' + "Number of arguments for build_synthetics are incorrect.\n"
+                                                 "Should be 7(seven) arguments:\n" + '\x1b[0m'
+                                    + '\x1b[1;34m' + "mutacc database configfile\n"
+                                    + '\x1b[1;34m' + "synthetic database configfile(use same root_dir as mutacc database)\n"
+                                                     "BAM file to be used as a background for the dataset\n"
+                                                     "FastQ file to be used as a background for the dataset\n"
+                                                     "Pair of first FastQ file for pair ended background for dataset\n"
+                                                     "FastQ file for reference data to be included in the random sampling\n"
+                                                     "pair of the first FastQ file for reference data to be included in "
+                                                     "the random sampling\n" + '\x1b[0m')
+
             else:
-                raise UserError('\x1b[33m' + "Number of arguments for remove are incorrect.\n"
-                                             "Should be 2(two) arguments:\n" + '\x1b[0m'
-                                + '\x1b[1;34m' + "case_id recorded in database\n"
-                                                 "configfile for mutacc"
+                print('\x1b[33m' + "No such commands exists . . . You ignorant FOOL!" + '\x1b[0m' + '\n\n')
+                raise UserError('\x1b[31m'
+                                + "Try 'create_mutations' to create new mutations from a BAM file, \n"
+                                  "'mass_mutate' to create new mutations from several BAM files, \n"
+                                  "'import' to import cases to database, \n"
+                                  "'remove' to delete cases from the database, \n"
+                                  "'create_dataset' to create synthetic datasets from the database, \n"
+                                  " or 'build_synthetics' to create randomized datasets from the database"
+                                  " and from reference data\n"
                                 + '\x1b[0m')
-
-        elif sys.argv[1] == 'create_dataset':
-            if 8 <= len(sys.argv) < 11:
-                print(
-                    '\x1b[33m' + "BEEP BEEEP BEEP . . .Sorry, robot in my throat. Creating your datasets." + '\x1b[0m')
-            else:
-                raise UserError('\x1b[33m' + "Number of arguments for create_dataset are incorrect.\n"
-                                             "Should be 4(four) to 6(six) arguments:\n" + '\x1b[0m'
-                                + '\x1b[1;34m' + "mutacc configfile\n"
-                                                 "BAM file to be used as a background for the dataset\n"
-                                                 "FastQ file to be used as a background for the dataset\n"
-                                                 "Pair of first FastQ file for pair ended background for dataset\n"
-                                                 "(OPTIONAL) Status of samples to use; default is affected cases\n"
-                                                 "(OPTIONAL) specific case search term,"
-                                                 " see mutacc API for more information; defaults to None" + '\x1b[0m')
-
-        elif sys.argv[1] == 'build_synthetics':
-            if 9 <= len(sys.argv) < 12:
-                print('\x1b[33m' + "The synths are here . . .  RUN!" + '\x1b[0m')
-            else:
-                raise UserError('\x1b[33m' + "Number of arguments for build_synthetics are incorrect.\n"
-                                             "Should be 7(seven) arguments:\n" + '\x1b[0m'
-                                + '\x1b[1;34m' + "mutacc database configfile\n"
-                                + '\x1b[1;34m' + "synthetic database configfile(use same root_dir as mutacc database)\n"
-                                                 "BAM file to be used as a background for the dataset\n"
-                                                 "FastQ file to be used as a background for the dataset\n"
-                                                 "Pair of first FastQ file for pair ended background for dataset\n"
-                                                 "FastQ file for reference data to be included in the random sampling\n"
-                                                 "pair of the first FastQ file for reference data to be included in "
-                                                 "the random sampling\n" + '\x1b[0m')
-
-        else:
-            print('\x1b[33m' + "No such commands exists . . . You ignorant FOOL!" + '\x1b[0m' + '\n\n')
-            raise UserError('\x1b[31m'
-                            + "Try 'create_mutations' to create new mutations from a BAM file, \n"
-                              "'mass_mutate' to create new mutations from several BAM files, \n"
-                              "'import' to import cases to database, \n"
-                              "'remove' to delete cases from the database, \n"
-                              "'create_dataset' to create synthetic datasets from the database, \n"
-                              " or 'build_synthetics' to create randomized datasets from the database"
-                              " and from reference data\n"
-                            + '\x1b[0m')
-    except Exception as e:
-        print('\x1b[37m' + "Arguments are faulty or incorrect" + '\x1b[0m', end=':\n')
-        print(e)
+        except Exception as e:
+            print('\x1b[37m' + "Arguments are faulty or incorrect" + '\x1b[0m', end=':\n')
+            print(e)
 
 
 # TODO:
@@ -253,4 +271,4 @@ def build_synthetic_dataset(mutaccdb_config, syntheticdb_config, background_bam,
 # TODO:
 #       Allow calling of any function in this file.
 if __name__ == '__main__':
-    main()
+    main(sys.argv)
