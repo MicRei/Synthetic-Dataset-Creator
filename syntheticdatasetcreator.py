@@ -37,12 +37,10 @@ def main(args):
             # they correspond with the arguments sent to create_mutations_in_bamfile
             if args[1] == 'create_mutations':
                 if 6 <= len(args) < 9:
-                    print('\x1b[33m' + 'MUTANTS ARISE!' + '\x1b[0m')
                     if args[2] in {'addsnv', 'addsv', 'addindel'}:
                         file_checker = [path.Path(arg).is_file() for arg in args[3:6]]
                         suffixes = [path.Path(arg).suffix for arg in args[3:6]]
                         if False not in file_checker:
-                            # TODO: check that each file is a BED, fa, and BAM, respectively
                             if (suffixes[0] == '.bed' and
                                     suffixes[1] == '.fa' and
                                     suffixes[2] == '.bam'):
@@ -64,7 +62,6 @@ def main(args):
                                                         + "Please see over your arguments as the "
                                                           "number of processes sent in was not a number"
                                                         + '\x1b[0m')
-                                print(create_mutation_arguments)
                                 create_mutations_in_bamfile(*create_mutation_arguments)
 
                         else:
@@ -100,20 +97,57 @@ def main(args):
                                                      "(OPTIONAL) number of processes; default is 1(one)" + '\x1b[0m')
 
             elif args[1] == 'import':
-                if 5 <= len(args) < 14:
-                    print(len(args))
-                    print(args)
-                    print('\x1b[33m' + "Scotty beaming you up!" + '\x1b[0m')
+                if len(args) == 5 or len(args) == 13:
+                    if path.Path(args[3]).is_file() and path.Path(args[3]).suffix == '.yaml':
+                        if args[4].isdigit() is False:
+                            raise UserError('\x1b[31m'
+                                            + "Please see over your arguments as the padding must be a number"
+                                            + '\x1b[0m')
+                    else:
+                        raise UserError('\x1b[31m'
+                                        + "Please see over your arguments as the config file is not a .yaml file"
+                                        + '\x1b[0m')
+
                     if len(args) == 5:
-                        print('hello')
+                        import_args = args[2:5]
+                        import_to_database(*import_args)
+
+                    elif len(args) == 13:
+                        additional_args = args[5:]
+                        if additional_args[1] not in {'male', 'female', 'unknown'}:
+                            raise UserError('\x1b[31m'
+                                            + "Please see over your arguments as the only genders accepted are male,"
+                                              " female, and unknown (all lower case letters)"
+                                            + '\x1b[0m')
+
+                        if not path.Path(additional_args[4]).is_file() \
+                                and path.Path(additional_args[4]).suffix != '.bam':
+                            raise UserError('\x1b[31m'
+                                            + "Please see over your arguments as a valid .bam file was not given."
+                                            + '\x1b[0m')
+
+                        if additional_args[6] not in {'affected', 'unaffected'}:
+                            raise UserError('\x1b[31m'
+                                            + "Please see over your arguments as the phenotype should "
+                                              "be affected or unaffected (all lower case letters)"
+                                            + '\x1b[0m')
+
+                        if not path.Path(additional_args[7]).is_file() \
+                                and path.Path(additional_args[7]).suffix != '.vcf':
+                            raise UserError('\x1b[31m'
+                                            + "Please see over your arguments as a valid .vcf file was not given."
+                                            + '\x1b[0m')
+                        import_args = args[2:]
+                        import_to_database(*import_args)
+
                 else:
                     raise UserError('\x1b[33m' + "Number of arguments for import are incorrect.\n"
-                                                 "Should be 3(three) to 13(thirteen) arguments:\n" + '\x1b[0m'
+                                                 "Should be 3(three) OR 13(thirteen) arguments:\n" + '\x1b[0m'
                                     + '\x1b[1;34m' + "case_id\n"
                                                      "configfile\n"
                                                      "padding\n"
                                                      "(OPTIONAL) Sample ID\n"
-                                                     "(OPTIONAL) Gender of sample\n"
+                                                     "(OPTIONAL) Gender of sample; male, female, or unknown\n"
                                                      "(OPTIONAL) Sample ID of mother, 0 if none exists\n"
                                                      "(OPTIONAL) Sample ID of father, 0 if none exists\n"
                                                      "(OPTIONAL) Path to BAM file for sample\n"
@@ -225,7 +259,8 @@ def import_to_database(case_id, configfile, padding, *args):
                         For an example, see https://github.com/Clinical-Genomics/mutacc#populate-the-mutacc-database
     :return:
     """
-    if args is None or len(args) == 8:
+
+    if args is None or len(args) == 0:
         mach.import_to_database(case_id, configfile, padding)
     elif len(args) == 8:
         mach.import_to_database(case_id, configfile, padding, *args)
