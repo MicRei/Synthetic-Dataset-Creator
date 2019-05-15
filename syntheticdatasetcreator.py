@@ -15,6 +15,11 @@ class UserError(Exception):
 
 
 def main(args):
+    """
+    Check which command is invoked and check that the arguments provided are valid.
+    :param args: arguments for the run
+    :return: None, depends on the function called.
+    """
     if len(args) == 1:
         print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"
               "Welcome to Synthetic Dataset Creator.\n"
@@ -213,22 +218,8 @@ def main(args):
             elif args[1] == 'build_synthetics':
                 print(len(args))
                 if 7 == len(args) or len(args) == 9:
-                    print('\x1b[33m' + "The synths are here . . .  RUN!" + '\x1b[0m')
-                    # TODO: check:
-                    #       - configfile
-                    #       - synthetic configfile
-                    #       - bam file
-                    #       - fastq1
-                    #       - fastq2
-                    #       -  reference fastq1
-                    #       -  reference fastq2
-
-                    print(args)
-                    print(len(args))
                     file_checker = [path.Path(arg).is_file() for arg in args[2:]]
                     suffixes = [path.Path(arg).suffix for arg in args[2:]]
-                    print(file_checker)
-                    print(suffixes)
                     if False in file_checker:
                         raise UserError('\x1b[31m'
                                         + "Please look over your arguments as one or more of the provided arguments "
@@ -250,14 +241,7 @@ def main(args):
                                             + "Please look over your arguments as one or more of the 2(two) references"
                                               " was not a fastq or fastq.gz filetype: {}".format(suffixes[5:])
                                             + '\x1b[0m')
-
                     synthetic_args = args[2:]
-
-                    print('\n\n')
-                    print(synthetic_args)
-                    print('\n\n')
-                    print(*synthetic_args)
-                    print('\n\n')
                     build_synthetic_dataset(*synthetic_args)
                 else:
                     raise UserError('\x1b[33m' + "Number of arguments for build_synthetics are incorrect.\n"
