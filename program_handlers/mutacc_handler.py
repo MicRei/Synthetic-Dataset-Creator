@@ -84,12 +84,7 @@ def export_from_database(configfile, background_bam, background_fastq1, backgrou
     :return:                    Outputs fastq files related to the synthetic dataset created.
     """
     root_dir = _get_mutacc_root_dir(configfile)
-
-    print(root_dir)
-
     path_to_query = root_dir + 'queries/affected_query.mutacc'
-
-    print(path_to_query)
     if case is None:
         case = '{}'
     sp.run(['mutacc', '--config-file', configfile, 'db', 'export', '-m', member, '-c', case])

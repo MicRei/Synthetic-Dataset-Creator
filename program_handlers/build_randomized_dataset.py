@@ -37,18 +37,11 @@ def create_randomized_dataset(case_db_configfile, synth_db_configfile, backgroun
     if reference_data_fq1 is None:
         reference_data_fq1 = []
         reference_data_fq2 = []
-    elif type(reference_data_fq1) is list:
-        print("Using List")
-        # TODO: Use list
     elif Path(reference_data_fq1).is_file() is True:
-        print("Handling File")
         reference_data_fq1 = [reference_data_fq1, ]
         reference_data_fq2 = [reference_data_fq2, ]
-        # TODO: read one line at a time and add to list
     else:
         raise BuildingError('Reference data is not a valid file or list. Please see API for proper usage.')
-        # TODO: end run
-        return
 
     if len(reference_data_fq1) != 0 and len(reference_data_fq1) == len(reference_data_fq2):
         dict_of_referencedata = _pair_reference_fastq_files(reference_data_fq1, reference_data_fq2)
@@ -93,6 +86,9 @@ def create_randomized_dataset(case_db_configfile, synth_db_configfile, backgroun
                        stdout=synthetic_fq_1)
                 sp.run(['cat', path_to_mutacc_datasets + synthetic_fqs[1], chosen_references_pair[fq_file]],
                        stdout=synthetic_fq_2)
+    else:
+        sp.run(['cp', path_to_mutacc_datasets + synthetic_fqs[0], path_to_synthetic_datasets + synthetic_fqs[0]])
+        sp.run(['cp', path_to_mutacc_datasets + synthetic_fqs[1], path_to_synthetic_datasets + synthetic_fqs[1]])
 
 
 def _create_synthesized_dataset_from_database(background_bam, background_fastq1, background_fastq2, caselist,

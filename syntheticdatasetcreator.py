@@ -28,7 +28,7 @@ def main(args):
               "\t\t\t Cases can be fetched by a JSON string of valid MongoDB language.\n"
               "\t build_synthetics: Randomly choose cases in the mutacc database and referencedata, and build\n"
               "\t\t\t  a new dataset from them.\n"
-              "\t mass_mutate: NOT IMPLEMENTED YET. Mutate several BAM files at the regions specified in "
+              "\t mass_mutate: NOT IMPLEMENTED YET. Mutate several BAM files at the regions specified in \n"
               "\t\t\t their specific BED file and import them to the mutacc database.\n"
               "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n")
     else:
@@ -98,14 +98,13 @@ def main(args):
 
             elif args[1] == 'import':
                 if len(args) == 5 or len(args) == 13:
-                    if path.Path(args[3]).is_file() and path.Path(args[3]).suffix == '.yaml':
-                        if args[4].isdigit() is False:
-                            raise UserError('\x1b[31m'
-                                            + "Please see over your arguments as the padding must be a number"
-                                            + '\x1b[0m')
-                    else:
+                    if not path.Path(args[3]).is_file() or path.Path(args[3]).suffix != '.yaml':
                         raise UserError('\x1b[31m'
                                         + "Please see over your arguments as the config file is not a .yaml file"
+                                        + '\x1b[0m')
+                    if args[4].isdigit() is False:
+                        raise UserError('\x1b[31m'
+                                        + "Please see over your arguments as the padding must be a number"
                                         + '\x1b[0m')
 
                     if len(args) == 5:
@@ -157,18 +156,49 @@ def main(args):
 
             elif args[1] == 'remove':
                 if 4 <= len(args) < 5:
-                    print('\x1b[33m' + "Death befalls us all . . ." + '\x1b[0m')
+                    if not path.Path(args[3]).is_file() or path.Path(args[3]).suffix != '.yaml':
+                        raise UserError('\x1b[31m'
+                                        + "Please see over your arguments as the config file is not a .yaml file"
+                                        + '\x1b[0m')
+                    remove_case_from_database(args[2], args[3])
                 else:
                     raise UserError('\x1b[33m' + "Number of arguments for remove are incorrect.\n"
                                                  "Should be 2(two) arguments:\n" + '\x1b[0m'
-                                    + '\x1b[1;34m' + "case_id recorded in database\n"
+                                    + '\x1b[1;34m' + "case_id to be recorded in database\n"
                                                      "configfile for mutacc"
                                     + '\x1b[0m')
 
             elif args[1] == 'create_dataset':
-                if 8 <= len(args) < 11:
-                    print(
-                        '\x1b[33m' + "BEEP BEEEP BEEP . . .Sorry, robot in my throat. Creating your datasets." + '\x1b[0m')
+                if 6 <= len(args) < 9:
+                    file_checker = [path.Path(arg).is_file() for arg in args[2:6]]
+                    suffixes = [path.Path(arg).suffix for arg in args[2:6]]
+                    if False in file_checker:
+                        raise UserError('\x1b[31m'
+                                        + "Please look over your arguments as one or more of the 4(four) required"
+                                          " ones them was not a file or in the right order; {}".format(args[2:6])
+                                        + '\x1b[0m')
+                    if ('.yaml' != suffixes[0]
+                            or '.bam' != suffixes[1]
+                            or suffixes[2] not in {'.gz', '.fastq'}
+                            or suffixes[3] not in {'.gz', '.fastq'}):
+                        raise UserError('\x1b[31m'
+                                        + "Please look over your arguments as one or more of the 4(four) required"
+                                          " ones them was not a filetype or in the right order: {}".format(suffixes)
+                                        + '\x1b[0m')
+                    dataset_args = args[2:6]
+                    if len(args) > 6:
+                        if args[6] not in {'affected', 'mother', 'father', 'child'}:
+                            raise UserError('\x1b[31m'
+                                            + "Please look over your arguments as " + '\x1b[33m'
+                                            + '{} '.format(args[6]) + '\x1b[31m'
+                                            + "is not a valid member to search "
+                                              "for. valid ones are affected, child, mother, and father"
+                                            + '\x1b[0m')
+                        else:
+                            dataset_args.append(args[6])
+                    if len(args) > 7:
+                        dataset_args.append(args[7])
+                    create_dataset(*dataset_args)
                 else:
                     raise UserError('\x1b[33m' + "Number of arguments for create_dataset are incorrect.\n"
                                                  "Should be 4(four) to 6(six) arguments:\n" + '\x1b[0m'
@@ -181,19 +211,66 @@ def main(args):
                                                      " see mutacc API for more information; defaults to None" + '\x1b[0m')
 
             elif args[1] == 'build_synthetics':
-                if 9 <= len(args) < 12:
+                print(len(args))
+                if 7 == len(args) or len(args) == 9:
                     print('\x1b[33m' + "The synths are here . . .  RUN!" + '\x1b[0m')
+                    # TODO: check:
+                    #       - configfile
+                    #       - synthetic configfile
+                    #       - bam file
+                    #       - fastq1
+                    #       - fastq2
+                    #       -  reference fastq1
+                    #       -  reference fastq2
+
+                    print(args)
+                    print(len(args))
+                    file_checker = [path.Path(arg).is_file() for arg in args[2:]]
+                    suffixes = [path.Path(arg).suffix for arg in args[2:]]
+                    print(file_checker)
+                    print(suffixes)
+                    if False in file_checker:
+                        raise UserError('\x1b[31m'
+                                        + "Please look over your arguments as one or more of the provided arguments "
+                                          "was not a file or in the right order;\n {}".format(args[2:])
+                                        + '\x1b[0m')
+                    if ('.yaml' != suffixes[0]
+                            or '.yaml' != suffixes[1]
+                            or '.bam' != suffixes[2]
+                            or suffixes[3] not in {'.gz', '.fastq'}
+                            or suffixes[4] not in {'.gz', '.fastq'}):
+                        raise UserError('\x1b[31m'
+                                        + "Please look over your arguments as one or more of the 4(four) required"
+                                          " ones them was not a filetype or in the right order: {}".format(suffixes[:4])
+                                        + '\x1b[0m')
+                    if len(suffixes) > 5:
+                        if (suffixes[5] not in {'.gz', '.fastq'}
+                                or suffixes[6] not in {'.gz', '.fastq'}):
+                            raise UserError('\x1b[31m'
+                                            + "Please look over your arguments as one or more of the 2(two) references"
+                                              " was not a fastq or fastq.gz filetype: {}".format(suffixes[5:])
+                                            + '\x1b[0m')
+
+                    synthetic_args = args[2:]
+
+                    print('\n\n')
+                    print(synthetic_args)
+                    print('\n\n')
+                    print(*synthetic_args)
+                    print('\n\n')
+                    build_synthetic_dataset(*synthetic_args)
                 else:
                     raise UserError('\x1b[33m' + "Number of arguments for build_synthetics are incorrect.\n"
-                                                 "Should be 7(seven) arguments:\n" + '\x1b[0m'
+                                                 "Should be 5(five) or 7 (seven) arguments:\n" + '\x1b[0m'
                                     + '\x1b[1;34m' + "mutacc database configfile\n"
-                                    + '\x1b[1;34m' + "synthetic database configfile(use same root_dir as mutacc database)\n"
+                                    + '\x1b[1;34m' + "synthetic database configfile(same root_dir as mutacc database)\n"
                                                      "BAM file to be used as a background for the dataset\n"
                                                      "FastQ file to be used as a background for the dataset\n"
                                                      "Pair of first FastQ file for pair ended background for dataset\n"
-                                                     "FastQ file for reference data to be included in the random sampling\n"
-                                                     "pair of the first FastQ file for reference data to be included in "
-                                                     "the random sampling\n" + '\x1b[0m')
+                                                     "(OPTIONAL)FastQ file for reference data to be included in the "
+                                                     "random sampling\n"
+                                                     "(OPTIONAL)pair of the first FastQ file for reference data to "
+                                                     "be included in the random sampling\n" + '\x1b[0m')
 
             else:
                 print('\x1b[33m' + "No such commands exists . . . You ignorant FOOL!" + '\x1b[0m' + '\n\n')
@@ -341,12 +418,10 @@ def create_dataset(configfile, background_bam, background_fastq1, background_fas
 
 
 def build_synthetic_dataset(mutaccdb_config, syntheticdb_config, background_bam, background_fastq1, background_fastq2,
-                            reference_data_fq1, reference_data_fq2):
+                            reference_data_fq1=None, reference_data_fq2=None):
     build_dataset.create_randomized_dataset(mutaccdb_config, syntheticdb_config, background_bam, background_fastq1,
                                             background_fastq2, reference_data_fq1, reference_data_fq2)
 
 
-# TODO:
-#       Allow calling of any function in this file.
 if __name__ == '__main__':
     main(sys.argv)
