@@ -290,10 +290,6 @@ def create_mutations_in_bamfile(mutationtype, variationfile, referencefile, bamf
     try:
         if outputfile is None:
             outputfile = bamfile
-
-        # if type(nr_procs) != int:
-        #     raise UserError("Please use a number to specify the number of threads and not words")
-        # else:
         bamh.create_mutations(mutationtype, variationfile, referencefile, bamfile, outputfile, nr_procs)
     except UserError as e:
         print('An error occurred with the parameters for BAMSurgeon: ', e)
