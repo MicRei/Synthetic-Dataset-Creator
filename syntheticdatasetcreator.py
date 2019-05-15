@@ -185,8 +185,8 @@ def main(args):
                                         + '\x1b[0m')
                     if ('.yaml' != suffixes[0]
                             or '.bam' != suffixes[1]
-                            or suffixes[2] not in {'.gz', '.fastq'}
-                            or suffixes[3] not in {'.gz', '.fastq'}):
+                            or suffixes[2] not in {'.gz', '.fastq', '.fq'}
+                            or suffixes[3] not in {'.gz', '.fastq', '.fq'}):
                         raise UserError('\x1b[31m'
                                         + "Please look over your arguments as one or more of the 4(four) required"
                                           " ones them was not a filetype or in the right order: {}".format(suffixes)
@@ -229,15 +229,15 @@ def main(args):
                     if ('.yaml' != suffixes[0]
                             or '.yaml' != suffixes[1]
                             or '.bam' != suffixes[2]
-                            or suffixes[3] not in {'.gz', '.fastq'}
-                            or suffixes[4] not in {'.gz', '.fastq'}):
+                            or suffixes[3] not in {'.gz', '.fastq', '.fq'}
+                            or suffixes[4] not in {'.gz', '.fastq', '.fq'}):
                         raise UserError('\x1b[31m'
                                         + "Please look over your arguments as one or more of the 4(four) required"
                                           " ones them was not a filetype or in the right order: {}".format(suffixes[:4])
                                         + '\x1b[0m')
                     if len(suffixes) > 5:
-                        if (suffixes[5] not in {'.gz', '.fastq'}
-                                or suffixes[6] not in {'.gz', '.fastq'}):
+                        if (suffixes[5] not in {'.gz', '.fastq', '.fq'}
+                                or suffixes[6] not in {'.gz', '.fastq', '.fq'}):
                             raise UserError('\x1b[31m'
                                             + "Please look over your arguments as one or more of the 2(two) references"
                                               " was not a fastq or fastq.gz filetype: {}".format(suffixes[5:])
