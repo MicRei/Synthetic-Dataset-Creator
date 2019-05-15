@@ -6,7 +6,7 @@ import subprocess as sp
 from pathlib import Path
 
 
-# TODO: Parse args in case of more arguments. REMEMBER: addsv does not handle picard.
+# TODO: Parse args in case of more arguments. REMEMBER: addsv does not handle picard. Actually add args
 def create_mutations(mutationtype, variationfile, referencefile, bamfile, outputfile, nr_procs):  # *args
     """
         Create mutation based on user input in bamfile data based on positions given in variationfile and print

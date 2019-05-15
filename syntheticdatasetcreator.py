@@ -275,7 +275,7 @@ def main(args):
 
 
 # TODO:
-#   Add more arguments in case user wants to use more arguments
+#   Add more arguments in case user wants to use more arguments. See BAMsurgeon for more information
 def create_mutations_in_bamfile(mutationtype, variationfile, referencefile, bamfile, outputfile=None, nr_procs=1):
     """
     Create a mutation in a BAM file and output it to a new BAM file.
