@@ -84,7 +84,7 @@ def main(args):
                                                      "bamfile\n"
                                                      "(OPTIONAL) outputfile; default is None\n"
                                                      "(OPTIONAL) number of processes; default is 1(one)" + '\x1b[0m')
-            #TODO: Fix mass_mutate and add capability to open a file and store a list of arguments
+            # TODO: Fix mass_mutate and add capability to open a file and store a list of arguments
             elif args[1] == 'mass_mutate':
                 if 9 <= len(args) < 13:
                     print('\x1b[33m' + "CURRENTLY NOT IMPLEMENTED!" + '\x1b[0m')
