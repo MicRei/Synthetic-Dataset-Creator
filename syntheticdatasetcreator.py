@@ -87,9 +87,10 @@ def main(args):
 
             elif args[1] == 'mass_mutate':
                 if 9 <= len(args) < 13:
-                    print('\x1b[33m' + "MORE MUTANTS THAN THE WORLD CAN HANDLE!!! MOAHAHAHA!" + '\x1b[0m')
+                    print('\x1b[33m' + "CURRENTLY NOT IMPLEMENTED!" + '\x1b[0m')
                 else:
-                    raise UserError('\x1b[33m' + "Number of arguments for mass_mutate are incorrect.\n"
+                    raise UserError('\x1b[33m' + "CURRENTLY NOT IMPLEMENTED\n"
+                                                 "Number of arguments for mass_mutate are incorrect.\n"
                                                  "Should be 7(seven) to 12(twelve) arguments:\n" + '\x1b[0m'
                                     + '\x1b[1;34m' + "mutationtype\n"
                                                      "configfile\n"
@@ -212,8 +213,8 @@ def main(args):
                                                      "FastQ file to be used as a background for the dataset\n"
                                                      "Pair of first FastQ file for pair ended background for dataset\n"
                                                      "(OPTIONAL) Status of samples to use; default is affected cases\n"
-                                                     "(OPTIONAL) specific case search term,"
-                                                     " see mutacc API for more information; defaults to None" + '\x1b[0m')
+                                                     "(OPTIONAL) specific case search term, see mutacc API for "
+                                                     "more information; defaults to None" + '\x1b[0m')
 
             elif args[1] == 'build_synthetics':
                 print(len(args))
