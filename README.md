@@ -1,4 +1,4 @@
-# project_test
+# Synthetic Dataset Creator
 
 Dependencies: BAMsurgeon,
               MutAcc,
