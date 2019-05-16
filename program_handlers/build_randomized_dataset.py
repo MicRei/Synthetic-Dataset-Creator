@@ -67,25 +67,27 @@ def create_randomized_dataset(case_db_configfile, synth_db_configfile, backgroun
     else:
         chosen_references = {}
 
-    # TODO: Exclude overlapping fastq data, if present, when merging reference data and synthetic fq's.
-    # TODO: Or just use reference data as a dataset? Or use reference data as background?
-
     root_dir = _get_root_dir_path(synth_db_configfile)
     path_to_synthetic_datasets = root_dir + 'synthetics/'
     if not Path(path_to_synthetic_datasets).is_dir():
         Path(path_to_synthetic_datasets).mkdir()
     path_to_mutacc_datasets = root_dir + 'datasets/'
     synthetic_fqs = listdir(path_to_mutacc_datasets)
+
     if len(chosen_references) > 0:
         for fq_file in range(len(chosen_references)):
             with open(path_to_synthetic_datasets + Path(chosen_references[fq_file]).name + '.dataset_1.fastq.gz',
                       'w') as synthetic_fq_1, open(
-                path_to_synthetic_datasets + Path(chosen_references[fq_file]).name + '.dataset_2.fastq.gz',
+                path_to_synthetic_datasets + Path(chosen_references_pair[fq_file]).name + '.dataset_2.fastq.gz',
                     'w') as synthetic_fq_2:
                 sp.run(['cat', path_to_mutacc_datasets + synthetic_fqs[0], chosen_references[fq_file]],
                        stdout=synthetic_fq_1)
                 sp.run(['cat', path_to_mutacc_datasets + synthetic_fqs[1], chosen_references_pair[fq_file]],
                        stdout=synthetic_fq_2)
+
+                print(synthetic_fq_1.name)
+                print(synthetic_fq_2.name)
+
     else:
         sp.run(['cp', path_to_mutacc_datasets + synthetic_fqs[0], path_to_synthetic_datasets + synthetic_fqs[0]])
         sp.run(['cp', path_to_mutacc_datasets + synthetic_fqs[1], path_to_synthetic_datasets + synthetic_fqs[1]])

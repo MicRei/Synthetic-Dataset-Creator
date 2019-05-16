@@ -217,7 +217,6 @@ def main(args):
                                                      "more information; defaults to None" + '\x1b[0m')
 
             elif args[1] == 'build_synthetics':
-                print(len(args))
                 if 7 == len(args) or len(args) == 9:
                     file_checker = [path.Path(arg).is_file() for arg in args[2:]]
                     suffixes = [path.Path(arg).suffix for arg in args[2:]]
