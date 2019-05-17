@@ -2,4 +2,5 @@
 
 Dependencies: BAMsurgeon,
               MutAcc,
-              samtools
+              samtools,
+              MongoDB
