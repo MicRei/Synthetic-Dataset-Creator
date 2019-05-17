@@ -2,8 +2,8 @@
 
 **Dependencies**:  
 
-    *  BAMsurgeon  
-    *  MutAcc  
-    *  samtools  
-    *  MongoDB  
+    >  `BAMsurgeon`  
+    >  `MutAcc`  
+    >  `samtools`  
+    >  `MongoDB`  
   
