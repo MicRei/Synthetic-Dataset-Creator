@@ -76,10 +76,10 @@ def create_randomized_dataset(case_db_configfile, synth_db_configfile, backgroun
 
     if len(chosen_references) > 0:
         for fq_file in range(len(chosen_references)):
-            with open(path_to_synthetic_datasets + Path(chosen_references[fq_file]).name + '.dataset_1.fastq.gz',
-                      'w') as synthetic_fq_1, open(
-                path_to_synthetic_datasets + Path(chosen_references_pair[fq_file]).name + '.dataset_2.fastq.gz',
-                    'w') as synthetic_fq_2:
+            with open(path_to_synthetic_datasets + Path(chosen_references[fq_file]).name + '_' + str(fq_file)
+                      + '.dataset_1.fastq.gz', 'w') as synthetic_fq_1, open(
+                path_to_synthetic_datasets + Path(chosen_references_pair[fq_file]).name + '_' + str(fq_file)
+                    + '.dataset_2.fastq.gz', 'w') as synthetic_fq_2:
                 sp.run(['cat', path_to_mutacc_datasets + synthetic_fqs[0], chosen_references[fq_file]],
                        stdout=synthetic_fq_1)
                 sp.run(['cat', path_to_mutacc_datasets + synthetic_fqs[1], chosen_references_pair[fq_file]],
