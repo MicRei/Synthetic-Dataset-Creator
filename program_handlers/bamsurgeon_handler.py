@@ -17,7 +17,7 @@ def create_mutations(mutationtype, variationfile, referencefile, bamfile, output
                                     addsv adds a structural variance
                                     addindel adds the specified nucleotides or deletes the specified region.
                                     See https://github.com/adamewing/bamsurgeon for better specifications.
-        :param variationfile:   BED file specifying position to mutate, optionally with the desired base.
+        :param variationfile:   BED file specifying position to mutate, optionally with the desired bases to mutate to.
         :param referencefile:   FASTA file containing the genome the sample is mapped against.
         :param bamfile:         BAM file containing the sample reads.
         :param outputfile:      BAM file to store the mutated data.
