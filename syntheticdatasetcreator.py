@@ -156,7 +156,7 @@ def main(args):
                                                      "(OPTIONAL) Sample ID of mother, 0 if none exists\n"
                                                      "(OPTIONAL) Sample ID of father, 0 if none exists\n"
                                                      "(OPTIONAL) Path to BAM file for sample\n"
-                                                     "(OPTIONAL) Analysis type of sample (wgs, exon, etc.)\n"
+                                                     "(OPTIONAL) Analysis type of sample (wgs, wes, etc.)\n"
                                                      "(OPTIONAL) Phenotype of the sample (Usually affected)\n"
                                                      "(OPTIONAL) Path to VCF file" + '\x1b[0m')
 
